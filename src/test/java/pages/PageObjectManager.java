@@ -3,6 +3,7 @@ package pages;
 public class PageObjectManager {
 	
 	private DashboardPage dashboardPage;
+    private EditPatientPage editPatientPage;
 
 	public DashboardPage getDashboardPage() {
 		if (dashboardPage == null) {
@@ -11,4 +12,12 @@ public class PageObjectManager {
 		return dashboardPage;
 	}
 
+    public EditPatientPage getEditPatientPage() {
+        if (editPatientPage == null) {
+            editPatientPage = new EditPatientPage();
+        }
+        return editPatientPage;
+    }
+
+	
 }
