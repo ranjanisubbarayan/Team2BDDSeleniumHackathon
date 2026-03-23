@@ -3,6 +3,7 @@ package pages;
 public class PageObjectManager {
 	
 	private DashboardPage dashboardPage;
+	private MyPatientsPage myPatientsPage;
     private EditPatientPage editPatientPage;
     private DeletePatientPopupPage deletePatientPopupPage;
 
@@ -11,6 +12,13 @@ public class PageObjectManager {
 			dashboardPage = new DashboardPage();
 		}
 		return dashboardPage;
+	}
+	
+	public MyPatientsPage getMyPatientsPage() {
+		if (myPatientsPage == null) {
+			myPatientsPage = new MyPatientsPage();
+		}
+		return myPatientsPage;
 	}
 
     public EditPatientPage getEditPatientPage() {
