@@ -6,6 +6,7 @@ public class PageObjectManager {
 	private MyPatientsPage myPatientsPage;
     private EditPatientPage editPatientPage;
     private DeletePatientPopupPage deletePatientPopupPage;
+	private AddPatientPage addPatient;
 
 	public DashboardPage getDashboardPage() {
 		if (dashboardPage == null) {
@@ -20,7 +21,14 @@ public class PageObjectManager {
 		}
 		return myPatientsPage;
 	}
-
+	
+	public AddPatientPage getAddPatient() {
+		if (addPatient == null) {
+			addPatient = new AddPatientPage();
+		}
+		return addPatient;
+	}
+	
     public EditPatientPage getEditPatientPage() {
         if (editPatientPage == null) {
             editPatientPage = new EditPatientPage();
