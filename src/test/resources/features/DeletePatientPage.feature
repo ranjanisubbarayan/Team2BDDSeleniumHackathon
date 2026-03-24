@@ -1,3 +1,5 @@
+@DeletePatientPage
+
 Feature: Delete Patient Page Pop Up Validation
 
 #Dialogbox validation
