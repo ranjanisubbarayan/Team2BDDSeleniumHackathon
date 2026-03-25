@@ -8,78 +8,106 @@ Feature: Edit Patient Page Dialog Box Validation
 Background: User logged into the app and patients already exists
 
 Given User is in my patient page after logged in
-When User clicks edit icon for the particular patient
     
 Scenario: Verify Title of the dialog box
+When User clicks the Edit icon for a "<patientname>" in the patient table
 Then User should see Edit Patient page on the dialog box
  
 Scenario Outline: Verify presence of UI elements
-Then User should see "<fieldName>"
+When User clicks the Delete icon for a "<patientname>" in the patient table
+Then User should see "<fieldName>" in the editpage
 
 Examples:
-| fieldName            |
-| Submitbutton      |
-| Closebutton       |
-| file upload option |
+|patientname| fieldName|
+|Ram| Submitbutton|
+|Rama| Closebutton|
+|Pragyan| file upload option |
 
 
 Scenario Outline: Verify state of buttons
+When User clicks the Edit icon for a "<patientname>" in the patient table
 Then User should see "<button>" is enabled
 
 Examples:
-| button        |
-| Submitbutton | 
-| Closebutton  | 
+|patientname |button|
+|Rama| Submitbutton | 
+|Pragyan| Closebutton  | 
 
 Scenario Outline: Verify count of UI elements
+When User clicks the Edit icon for a "<patientname>" in the patient table
 Then User should see "<count>" "<element>"
 
 Examples:
-| count | element        |
-| 9     | inputfields   |
-| 3     | dropdowns      |
-
+|patientname| count | element|
+|Rama| 9| inputfields   |
+|Pragyan| 3| dropdowns|
+| Pragyan | 1     | ChooseFiles   |
 
 Scenario Outline: Verify presence of patient details
+When User clicks the Edit icon for a "<patientname>" in the patient table
 Then User should see the "<field_name>" field populated with the value entered during patient creation
 
 Examples:
-| field_name        |
-| First Name        |
-| Last Name         |
-| Email             |
-| Contact Number    |
-| Allergy           |
-| Food Preference   |
-| Cuisine Category  |
-| Date of Birth     |
+|patientname| field_name|
+|Rama| First Name|
+|Rama| Last Name|
+|Rama| Email|
+|Rama| Contact Number|
+|Rama| Allergy|
+|Rama| Food Preference|
+|Rama| Cuisine Category|
+|Rama| Date of Birth|
 
 
 Scenario Outline: Verify presence of vitals fields
+When User clicks the Edit icon for a "<patientname>" in the patient table
 Then User should see "<label>" in "<field>"
 
 Examples:
-| label        | field       |
-| vitals title | subtitle    |
-| SP           | SP field    |
-| DP           | DP field    |
-| Weight       | Weight field|
-| Height       | Height field|
-| Temperature  | Temperature field |
+|patientname| label| field|
+|Pragyan| vitals title | subtitle|
+|Pragyan| SP| SP field|
+|Pragyan| DP| DP field|
+|Pragyan| Weight| Weight field|
+|Pragyan| Height| Height field|
+|Pragyan| Temperature| Temperature field |
 
 
 
-Scenario: Verify Vitals information fields should not have mandatory indicator
+Scenario Outline: Verify Vitals information fields should not have mandatory indicator
+When User clicks the Edit icon for a "<patientname>" in the patient table
 Then User should not see mandatory indicators for Vitals Information fields
 
-Scenario: Verify Presence of Label Upload health report
+Examples:
+| patientname |
+| Ram         |
+| Rama        |
+| Pragyan     |
+
+Scenario Outline: Verify Presence of Label Upload health report
+When User clicks the Edit icon for a "<patientname>" in the patient table
 Then User should see Upload health report : text for Upload button
-
-Scenario: Verify Presence of No File Choosen text when no files uploaded
+Examples:
+| patientname |
+| Ram         |
+| Rama        |
+| Pragyan     |
+Scenario Outline: Verify Presence of No File Choosen text when no files uploaded
+When User clicks the Edit icon for a "<patientname>" in the patient table
 Then User should see "No File Choosen" text
-
-Scenario: Verify Close button color
+Examples:
+| patientname |
+| Ram         |
+| Rama        |
+| Pragyan     |
+Scenario Outline: Verify Close button color
+When User clicks the Edit icon for a "<patientname>" in the patient table
 Then Close button should have red color
+Examples:
+| patientname |
+| Ram         |
+| Rama        |
+| Pragyan     |
 
 #Funtional Validation of the Edit page dialog box
   
@@ -95,22 +123,22 @@ When User clears existing value in "<field>" field
 Then User should see placeholder "<placeholdername>"
 
 Examples:
-| field         | placeholdername     |
-| first name    | First name      |
-| last name     | Last name       |
-| email         | Email           |
-| contact no    | Contact Number  |
+| field| placeholdername|
+| first name| First name|
+| last name| Last name|
+| email| Email|
+| contact no| Contact Number|
 
 Scenario Outline: Verify edit first name with different inputs
 When User clicks submit after editing first name with "<input_type>"
 Then User should see "<result>" after redirected to my patient with edited value in first name
 
 Examples:
-| input_type        | result|
-| Ram       | Ram|
-| 12345      | error message Patient name accepts only alphabets|
-| @123  | error message Patient name accepts only alphabets|
-| @#$   | error message Patient name accepts only alphabets|
+| input_type| result|
+| Ram| Ram|
+| 12345| error message Patient name accepts only alphabets|
+| @123| error message Patient name accepts only alphabets|
+| @#$| error message Patient name accepts only alphabets|
 
 
 
@@ -119,35 +147,35 @@ When User clicks submit after editing the last name with "<input_type>"
 Then User should see "<result>" after redirected to my patient with edited value in Last name
 
 Examples:
-| input_type        | result|
-| Kumar       | Kumar|
-| 12345      | error message Patient name accepts only alphabets|
-| @123  | error message Patient name accepts only alphabets|
-| @#$   | error message Patient name accepts only alphabets|
+| input_type| result|
+| Kumar| Kumar|
+| 12345| error message Patient name accepts only alphabets|
+| @123| error message Patient name accepts only alphabets|
+| @#$| error message Patient name accepts only alphabets|
 
 Scenario Outline: Verify edit email with different inputs
 When User clicks submit after editing the email with "<input_type>"
 Then User should see "<result>" after redirected to my patient with edited value in Email field
 
 Examples:
-| input_type        | result                             |
-| ram.kumar@test.com| ram.kumar@test.com                 |
-| ramkumar.com      | Please enter a valid email address |
+| input_type| result|
+| ram.kumar@test.com| ram.kumar@test.com|
+| ramkumar.com| Please enter a valid email address |
 | ramkumar.test.com | Please enter a valid email address |
-| ram@$%.com       | Please enter a valid email address |
-|                    | Email field cannot be empty        |
+| ram@$%.com| Please enter a valid email address |
+|| Email field cannot be empty|
 
 Scenario Outline: Verify edit CTC number with different inputs
 When User clicks submit after editing the CTC number with "<input_type>"
 Then User should see "<result>"
 
 Examples:
-| input_type | result                                 |
-| 8277117996 | 8277117996                             |
-| abcdef     | CTC number accepts only numeric values |
-| @#$     | CTC number accepts only numeric values |
-| 12345      | Please enter a valid CTC number        |
-|            | CTC number field cannot be empty       |
+| input_type | result|
+| 8277117996 | 8277117996|
+| abcdef| CTC number accepts only numeric values|
+| @#$| CTC number accepts only numeric values |
+| 12345| Please enter a valid CTC number|
+|| CTC number field cannot be empty|
 
 Scenario Outline: Verify edit "<field>" with valid value
 When User clicks submit after entering a "<validvalue>" in the "<field>" field
@@ -175,8 +203,8 @@ Then User should receive error message in "<other_field>" field
 
 Examples:
   | field | other_field | value |
-  | SP    | DP          | 120   |
-  | DP    | SP          | 80    |
+  | SP| DP| 120|
+  | DP| SP| 80|
 
 Scenario: Verify edit SP and DP with valid values
 When User clicks submit after entering valid values in SP "<sp>" and DP "<dp>" fields
@@ -221,9 +249,9 @@ When User performs "<action>" on Date of Birth field
 Then User should see "<result>"
 
 Examples:
-| action                  | result                                                  |
-| clicks                  | calender date picker displayed with Month, Day, Year    |
-| clicks calendar field   | the future date to be disabled                          |
+| action| result|
+| clicks| calender date picker displayed with Month, Day, Year    |
+| clicks calendar field   | the future date to be disabled|
 
 
 Scenario Outline: Verify valid date selection in DOB field
@@ -242,12 +270,12 @@ When User enters "<input>" in the DOB field
 Then User should see an error message "<error_message>"
 
 Examples:
-| input        | error_message                          |
+| input| error_message|
 | current date | Invalid date, Please select valid date |
 | 34/20/2022   | Invalid date, Please select valid date |
-| ab/cd/efgh   | Invalid date format                    |
-| 12/05        | Invalid date format                    |
-| 02/29/2023   | Please select valid date               |
+| ab/cd/efgh   | Invalid date format|
+| 12/05        | Invalid date format|
+| 02/29/2023   | Please select valid date|
 
 
 Scenario: Verify Boundary year Navigation
@@ -265,10 +293,10 @@ When  User clicks "View Previous Test Report" after being redirected to the My P
 Then User should see "<result>"
 
 Examples:
-| result                                           |
-| new record number in test report page            |
-| PDF file in test report                          |
-| upload date info in test report                  |
+| result|
+| new record number in test report page|
+| PDF file in test report|
+| upload date info in test report|
 | health condition as the values in health report  |
 
 Scenario Outline: Verify invalid file upload scenarios
@@ -276,11 +304,11 @@ When User clicks submit after "<action>"
 Then User should see the error message "<error_message>"
 
 Examples:
-| action                                              | error_message                                      |
-| uploading a file with an invalid file type - docx   | Invalid file type. Please upload a valid file       |
-| uploading invalid file type - jpeg                  | Invalid file type. Please upload a valid file       |
-| uploading a file larger than allowed size           | File size exceeds the allowed limit                |
-| uploading without any file                                  | Please select a file to upload                     |
+| action| error_message|
+| uploading a file with an invalid file type - docx| Invalid file type. Please upload a valid file|
+| uploading invalid file type - jpeg| Invalid file type. Please upload a valid file|
+| uploading a file larger than allowed size| File size exceeds the allowed limit|
+| uploading without any file| Please select a file to upload|
 
 
 Scenario: Verify Close edit dialog using Close button

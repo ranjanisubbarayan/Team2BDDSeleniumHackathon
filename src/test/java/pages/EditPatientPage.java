@@ -66,17 +66,16 @@ public class EditPatientPage {
 	@FindBy(xpath = "//*[contains(text(),'Vitals')]")
 	private WebElement vitalsSectionTitle;
 	
-	@FindBy(xpath = "//*[contains(text(),'Allergies')]")
-	private WebElement allergiesDropdown;
-
-	@FindBy(xpath = "//*[contains(text(),'Food Preference')]")
-	private WebElement foodPreferenceDropdown;
-
-	@FindBy(xpath = "//*[contains(text(),'Cuisine Category')]")
-	private WebElement cuisineCategoryDropdown;
-		
-	@FindBy(xpath = "//input[@type='file']")
-	private WebElement fileUploadInput;
+//	@FindBy(xpath = "//*[contains(text(),'Allergies')]")
+//	private WebElement allergiesDropdown;
+//
+//	@FindBy(xpath = "//*[contains(text(),'Food Preference')]")
+//	private WebElement foodPreferenceDropdown;
+//
+//	@FindBy(xpath = "//*[contains(text(),'Cuisine Category')]")
+//	private WebElement cuisineCategoryDropdown;
+	@FindBy (xpath = ("//input[@type = 'file']"))
+	private List<WebElement> fileUploadInput;	
 
 	@FindBy(xpath = "//*[contains(text(),'Upload Health Report')]")
 	private WebElement uploadHealthReportLabel;
@@ -99,7 +98,34 @@ public class EditPatientPage {
 	@FindBy(xpath = "//select | //*[@role='combobox']")
 	private List<WebElement> dropdowns;
 	
+	@FindBy(xpath = "(//table//tr[1]//*[contains(@class,'edit') or contains(text(),'Edit')])")
+	private WebElement firstRowEditIcon;
 	
+	@FindBy(xpath = "//table//tbody//tr")
+	private List<WebElement> patientRows;
+	
+	
+	public void clickEditIconForfirstRowPatient() {
+		logger.info("Clicking edit icon for first patient row");
+		waitUtils.waitForClickable(firstRowEditIcon).click();
+	}
+	
+	public WebElement getEditIconByPatientName(String patientName) {
+		for (WebElement row : patientRows) {
+			if (row.getText().contains(patientName)) {
+				return row.findElement(By.xpath(
+					".//*[contains(@class,'edit') or contains(@title,'Edit') or contains(text(),'Edit')]"
+				));
+			}
+		}
+		throw new RuntimeException("Patient not found: " + patientName);
+	}
+	public void clickEditIconByPatientName(String patientName) {
+		logger.info("Clicking edit icon for patient: {}", patientName);
+
+		WebElement editIcon = getEditIconByPatientName(patientName);
+		waitUtils.waitForClickable(editIcon).click();
+	}
 	public boolean isEditPatientDialogDisplayed() {
         return isElementDisplayed(dialogTitle);
     }
@@ -123,11 +149,16 @@ public class EditPatientPage {
     public boolean isVitalsTitleDisplayed() {
         return isElementDisplayed(vitalsSectionTitle);
     }
-    public boolean isnoFileChosenTextDisplayed() {
-        return isElementDisplayed(noFileChosenText);
-    }
+//    public boolean isnoFileChosenTextDisplayed() {
+//        return isElementDisplayed(noFileChosenText);
+//    }
     public boolean isFileUploadOptionDisplayed() {
-        return isElementDisplayed(fileUploadInput) || isElementDisplayed(uploadHealthReportLabel);
+    	for (WebElement element : fileUploadInput) {
+            if (element.isDisplayed()) {
+                return true;
+            }
+        }
+        return false;
     }
     
     public int getInputFieldCount() {
@@ -137,6 +168,10 @@ public class EditPatientPage {
     public int getDropdownCount() {
         return dropdowns.size();
     }
+    
+	public int getuploadFile(){
+		return fileUploadInput.size();
+		}
     private WebElement getField(String fieldName) {
 
         fieldName = fieldName.trim().toLowerCase();
@@ -224,11 +259,11 @@ public class EditPatientPage {
         logger.info("Clicked Close button.");
     }
     
-    public void uploadFile(String filePath) {
-        waitForVisibility(fileUploadInput);
-        fileUploadInput.sendKeys(Paths.get(filePath).toAbsolutePath().toString());
-        logger.info("Uploaded file: {}", filePath);
-    }
+//    public void uploadFile(String filePath) {
+//        waitForVisibility(fileUploadInput);
+//        fileUploadInput.sendKeys(Paths.get(filePath).toAbsolutePath().toString());
+//        logger.info("Uploaded file: {}", filePath);
+//    }
     
     public boolean isErrorMessageDisplayed(String expectedMessage) {
 
@@ -244,9 +279,9 @@ public class EditPatientPage {
 
         return false;
     }
-    public boolean isRequiredMessageDisplayed() {
-        return !errorMessages.isEmpty();
-    }
+//    public boolean isRequiredMessageDisplayed() {
+//        return !errorMessages.isEmpty();
+//    }
 
     public void selectDOB(String date) {
         waitForVisibility(dob);
@@ -266,27 +301,27 @@ public class EditPatientPage {
         }
     }
     
-    public boolean isFieldDisplayed(String fieldName) {
-        return isElementDisplayed(getField(fieldName));
-    }
+//    public boolean isFieldDisplayed(String fieldName) {
+//        return isElementDisplayed(getField(fieldName));
+//    }
+//
+//    public boolean isFieldEnabled(String fieldName) {
+//        return getField(fieldName).isEnabled();
+//    }
+//
+//    public void assertFieldValue(String fieldName, String expectedValue) {
+//        Assert.assertEquals(
+//                "Field value mismatch for: " + fieldName,
+//                expectedValue,
+//                getFieldValue(fieldName));
+//    }
 
-    public boolean isFieldEnabled(String fieldName) {
-        return getField(fieldName).isEnabled();
-    }
-
-    public void assertFieldValue(String fieldName, String expectedValue) {
-        Assert.assertEquals(
-                "Field value mismatch for: " + fieldName,
-                expectedValue,
-                getFieldValue(fieldName));
-    }
-
-    public void assertPlaceholder(String fieldName, String expectedPlaceholder) {
-        Assert.assertEquals(
-                "Placeholder mismatch for: " + fieldName,
-                expectedPlaceholder,
-                getPlaceholder(fieldName));
-    }
+//    public void assertPlaceholder(String fieldName, String expectedPlaceholder) {
+//        Assert.assertEquals(
+//                "Placeholder mismatch for: " + fieldName,
+//                expectedPlaceholder,
+//                getPlaceholder(fieldName));
+//    }
     public String getPlaceholder(String fieldName) {
         WebElement field = getField(fieldName);
         waitForVisibility(field);
@@ -309,15 +344,15 @@ public class EditPatientPage {
     }
     
 
-	  public boolean isTitleAfterDOBField() {
-      try {
-          int dobY = dob.getLocation().getY();
-          int vitalsY = vitalsSectionTitle.getLocation().getY();
-          return vitalsY >= dobY;
-      } catch (Exception e) {
-          logger.warn("Could not compare DOB and Vitals positions.");
-          return false;
-      }
-  }
+//	  public boolean isTitleAfterDOBField() {
+//      try {
+//          int dobY = dob.getLocation().getY();
+//          int vitalsY = vitalsSectionTitle.getLocation().getY();
+//          return vitalsY >= dobY;
+//      } catch (Exception e) {
+//          logger.warn("Could not compare DOB and Vitals positions.");
+//          return false;
+//      }
+//  }
 
 }
