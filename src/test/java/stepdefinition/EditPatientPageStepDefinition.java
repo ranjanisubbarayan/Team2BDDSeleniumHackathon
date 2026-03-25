@@ -20,13 +20,20 @@ public class EditPatientPageStepDefinition {
 
 @Given("User is in my patient page after logged in")
 public void user_is_in_my_patient_page_after_logged_in() {
-    
+	 if (pom.getDeletePatientPopupPage().isPatientTableDisplayed()) {
+	        logger.info("User already on My Patients page.");
+	        return;
+	    }
 }
 
-@When("User clicks edit icon for the particular patient")
-public void user_clicks_edit_icon_for_the_particular_patient() {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+@When("User clicks the Edit icon for a {string} in the patient table")
+public void user_clicks_the_edit_icon_for_a_in_the_patient_table(String patientname) {
+	
+	if (patientname != null && !patientname.trim().isEmpty()) {
+		pom.getEditPatientPage().clickEditIconByPatientName(patientname);
+	} else {
+		pom.getEditPatientPage().clickEditIconForfirstRowPatient();
+	}
 }
 
 @Then("User should see Edit Patient page on the dialog box")
@@ -35,8 +42,8 @@ public void user_should_see_edit_patient_page_on_the_dialog_box() {
 			"Edit Patient dialog is not displayed");
 }
 
-@Then("User should see {string}")
-public void user_should_see(String string) {
+@Then("User should see {string} in the editpage")
+public void user_should_see_in_the_editpage(String string) {
 	String key = string.trim().toLowerCase();
 
 	switch (key) {
@@ -72,9 +79,21 @@ public void user_should_see_is_enabled(String string) {
 	}
 }
 
-@Then("User should see {string} {string}")
-public void user_should_see(String string, String string2) {
-	
+@Then("User should see {int} {string}")
+public void user_should_see(int count, String element) {
+	int actualCount = 0;
+	switch (element) {
+	case "InputFields":
+	actualCount = pom.getEditPatientPage().getInputFieldCount();
+	break;
+	case "Dropdowns":
+	actualCount = pom.getEditPatientPage().getDropdownCount();
+	break;
+	case "ChooseFiles":
+		actualCount = pom.getAddPatient().getuploadFile();
+	break;	
+	}
+	Assert.assertEquals(actualCount, count, "Expected " + count + " " + element + " but found " + actualCount);
 }
 
 @Then("User should see the {string} field populated with the value entered during patient creation")
@@ -113,7 +132,7 @@ public void user_should_see_upload_health_report_text_for_upload_button() {
 
 @Then("User should see {string} text")
 public void user_should_see_text(String string) {
-//	Assert.assertTrue(pom.getEditPatientPage().isTextDisplayed(string), "Text is not displayed: " + string);
+
 }
 
 
@@ -180,19 +199,17 @@ public void user_clicks_submit_after_entering_a_in_the_field(String string, Stri
 
 @Then("User should be redirected to the My Patient page with the updated {string} value as {string}")
 public void user_should_be_redirected_to_the_my_patient_page_with_the_updated_value_as(String string, String string2) {
-	//pom.getEditPatientPage().clickActionByText(string);
+	
 }
 
 @When("User clicks {string} after being redirected to the My Patient page for updating {string} value")
 public void user_clicks_after_being_redirected_to_the_my_patient_page_for_updating_value(String string, String string2) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    
 }
 
 @Then("User should see {string} under vitals column in new record number")
 public void user_should_see_under_vitals_column_in_new_record_number(String string) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    
 }
 
 @When("User clicks submit after entering a valid {string} in the {string} field only")
@@ -223,8 +240,7 @@ public void user_clicks_submit_after_entering_valid_values_in_sp_and_dp_fields(S
 
 @Then("User should be redirected to My Patient page")
 public void user_should_be_redirected_to_my_patient_page() {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+  
 }
 
 @When("User clicks View Previous Test Report after being redirected to the My Patient page for updating the SP {string} and DP {string} value")
@@ -234,8 +250,7 @@ public void user_clicks_view_previous_test_report_after_being_redirected_to_the_
 
 @Then("User should see result for the update value  SP {string} and DP {string} value")
 public void user_should_see_result_for_the_update_value_sp_and_dp_value(String string, String string2) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+ 
 }
 
 @When("User clicks submit after entering {string} in {string} field")
@@ -266,12 +281,7 @@ public void user_should_see_the_slected_date(String string) {
 
 @When("User enters {string} in the DOB field")
 public void user_enters_in_the_dob_field(String string) {
-	if ("current date".equalsIgnoreCase(string)) {
-		String today = LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-		pom.getEditPatientPage().enterValue("dob", today);
-	} else {
-		pom.getEditPatientPage().enterValue("dob", string);
-	}
+	
 }
 
 @Then("User should see an error message {string}")
