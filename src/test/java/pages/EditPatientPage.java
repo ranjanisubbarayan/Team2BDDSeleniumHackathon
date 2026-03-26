@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.nio.file.Paths;
 import DriverManager.DriverFactory;
-import org.testng.Assert;
 import utils.WaitUtils;
 
 public class EditPatientPage {
@@ -66,14 +65,6 @@ public class EditPatientPage {
 	@FindBy(xpath = "//*[contains(text(),'Vitals')]")
 	private WebElement vitalsSectionTitle;
 	
-//	@FindBy(xpath = "//*[contains(text(),'Allergies')]")
-//	private WebElement allergiesDropdown;
-//
-//	@FindBy(xpath = "//*[contains(text(),'Food Preference')]")
-//	private WebElement foodPreferenceDropdown;
-//
-//	@FindBy(xpath = "//*[contains(text(),'Cuisine Category')]")
-//	private WebElement cuisineCategoryDropdown;
 	@FindBy (xpath = ("//input[@type = 'file']"))
 	private List<WebElement> fileUploadInput;	
 
@@ -149,9 +140,14 @@ public class EditPatientPage {
     public boolean isVitalsTitleDisplayed() {
         return isElementDisplayed(vitalsSectionTitle);
     }
-//    public boolean isnoFileChosenTextDisplayed() {
-//        return isElementDisplayed(noFileChosenText);
-//    }
+    
+    public String getVitalsTitletext() {
+        return vitalsSectionTitle.getText();
+    }
+    
+    public boolean isnoFileChosenTextDisplayed() {
+        return isElementDisplayed(noFileChosenText);
+    }
     public boolean isFileUploadOptionDisplayed() {
     	for (WebElement element : fileUploadInput) {
             if (element.isDisplayed()) {
@@ -259,11 +255,14 @@ public class EditPatientPage {
         logger.info("Clicked Close button.");
     }
     
-//    public void uploadFile(String filePath) {
-//        waitForVisibility(fileUploadInput);
-//        fileUploadInput.sendKeys(Paths.get(filePath).toAbsolutePath().toString());
-//        logger.info("Uploaded file: {}", filePath);
-//    }
+    public void uploadFile(String filePath) {
+        WebElement input = fileUploadInput.get(0);
+
+        waitForVisibility(input);
+        input.sendKeys(Paths.get(filePath).toAbsolutePath().toString());
+
+        logger.info("Uploaded file: {}", filePath);
+    }
     
     public boolean isErrorMessageDisplayed(String expectedMessage) {
 
@@ -279,9 +278,6 @@ public class EditPatientPage {
 
         return false;
     }
-//    public boolean isRequiredMessageDisplayed() {
-//        return !errorMessages.isEmpty();
-//    }
 
     public void selectDOB(String date) {
         waitForVisibility(dob);
@@ -300,33 +296,18 @@ public class EditPatientPage {
             return false;
         }
     }
-    
-//    public boolean isFieldDisplayed(String fieldName) {
-//        return isElementDisplayed(getField(fieldName));
-//    }
-//
-//    public boolean isFieldEnabled(String fieldName) {
-//        return getField(fieldName).isEnabled();
-//    }
-//
-//    public void assertFieldValue(String fieldName, String expectedValue) {
-//        Assert.assertEquals(
-//                "Field value mismatch for: " + fieldName,
-//                expectedValue,
-//                getFieldValue(fieldName));
-//    }
 
-//    public void assertPlaceholder(String fieldName, String expectedPlaceholder) {
-//        Assert.assertEquals(
-//                "Placeholder mismatch for: " + fieldName,
-//                expectedPlaceholder,
-//                getPlaceholder(fieldName));
-//    }
     public String getPlaceholder(String fieldName) {
         WebElement field = getField(fieldName);
         waitForVisibility(field);
         return field.getAttribute("placeholder");
     }
+    
+    public boolean isPlaceholderDisplayed(String fieldName) {
+        String placeholder = getPlaceholder(fieldName);
+        return placeholder != null && !placeholder.isEmpty();
+    }
+    
     private void waitForVisibility(WebElement element) {
         try {
         	WaitUtils.waitForVisibility(driver, element, 10);
@@ -343,16 +324,4 @@ public class EditPatientPage {
         }
     }
     
-
-//	  public boolean isTitleAfterDOBField() {
-//      try {
-//          int dobY = dob.getLocation().getY();
-//          int vitalsY = vitalsSectionTitle.getLocation().getY();
-//          return vitalsY >= dobY;
-//      } catch (Exception e) {
-//          logger.warn("Could not compare DOB and Vitals positions.");
-//          return false;
-//      }
-//  }
-
 }

@@ -7,6 +7,8 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import pages.PageObjectManager;
 import org.testng.Assert;
+import utils.ConfigReader;
+import utils.ElementUtil;
 
 public class EditPatientPageStepDefinition {
 	
@@ -40,8 +42,8 @@ public void user_should_see_edit_patient_page_on_the_dialog_box() {
 }
 
 @Then("User should see {string} in the editpage")
-public void user_should_see_in_the_editpage(String string) {
-	String key = string.trim().toLowerCase();
+public void user_should_see_in_the_editpage(String fieldName) {
+	String key = fieldName.trim().toLowerCase();
 
 	switch (key) {
 	case "submit button":
@@ -60,9 +62,9 @@ public void user_should_see_in_the_editpage(String string) {
 }
 
 @Then("User should see {string} is enabled")
-public void user_should_see_is_enabled(String string) {
-	logger.info("Validating element is enabled: {}", string);
-	String key = string.trim().toLowerCase();
+public void user_should_see_is_enabled(String button) {
+	logger.info("Validating element is enabled: {}", button);
+	String key = button.trim().toLowerCase();
 
 	switch (key) {
 	case "submit button":
@@ -113,6 +115,10 @@ public void user_should_see_in(String label, String field) {
 		String actualPlaceholder = pom.getEditPatientPage().getPlaceholder(normalizedField);
 		Assert.assertEquals(actualPlaceholder, label, "Placeholder mismatch for field: " + normalizedField);
 	} 
+	else if (field.equalsIgnoreCase("subtitle")) {
+	    String actualSubtitle = pom.getEditPatientPage().getVitalsTitletext();
+	    Assert.assertEquals(actualSubtitle, label, "Subtitle mismatch");
+	}
 }
 
 @Then("User should not see mandatory indicators for Vitals Information fields")
@@ -127,9 +133,11 @@ public void user_should_see_upload_health_report_text_for_upload_button() {
 			"Upload health report label is not displayed");
 }
 
-@Then("User should see {string} text")
-public void user_should_see_text(String string) {
-
+@Then("User should see No File Choosen  text")
+public void user_should_see_no_file_choosen_text() {
+	Assert.assertTrue(
+			pom.getEditPatientPage().isnoFileChosenTextDisplayed(),
+			"Expected text is not displayed " );
 }
 
 
@@ -140,67 +148,94 @@ public void close_button_should_have_red_color() {
 
 
 @When("User clears existing value in {string} field")
-public void user_clears_existing_value_in_field(String string) {
-	pom.getEditPatientPage().clearField(string);
+public void user_clears_existing_value_in_field(String fieldname) {
+	pom.getEditPatientPage().clearField(fieldname);
 }
 
 @Then("User should see placeholder {string}")
-public void user_should_see_placeholder(String string) {
-   
+public void user_should_see_placeholder(String placeholdername) {
+	Assert.assertTrue(
+			pom.getEditPatientPage().isPlaceholderDisplayed(placeholdername),
+			"Placeholder is not displayed: " + placeholdername);
 }
 
 @When("User clicks submit after editing first name with {string}")
-public void user_clicks_submit_after_editing_first_name_with(String string) {
-	pom.getEditPatientPage().enterValue("first name", string);
+public void user_clicks_submit_after_editing_first_name_with(String input_type) {
+	pom.getEditPatientPage().enterValue("first name", input_type);
 	pom.getEditPatientPage().clickSubmit();
 }
 
 @Then("User should see {string} after redirected to my patient with edited value in first name")
-public void user_should_see_after_redirected_to_my_patient_with_edited_value_in_first_name(String string) {
- 
+public void user_should_see_after_redirected_to_my_patient_with_edited_value_in_first_name(String result) {
+	Assert.assertTrue(
+			ElementUtil.getURL().toLowerCase().contains("mypatient"),"User is not redirected to My Patient page");
+	Assert.assertTrue(pom.getMyPatientsPage().isPatientNameDisplayedForAllRows());
+	String fieldName = "FirstName";
+	 Assert.assertTrue(pom.getMyPatientsPage().doesDetailsColumnContainField(fieldName));
 }
 
 @When("User clicks submit after editing the last name with {string}")
-public void user_clicks_submit_after_editing_the_last_name_with(String string) {
-	pom.getEditPatientPage().enterValue("last name", string);
+public void user_clicks_submit_after_editing_the_last_name_with(String input_type) {
+	pom.getEditPatientPage().enterValue("last name", input_type);
 	pom.getEditPatientPage().clickSubmit();
 }
 
 @Then("User should see {string} after redirected to my patient with edited value in Last name")
-public void user_should_see_after_redirected_to_my_patient_with_edited_value_in_last_name(String string) {
-   
+public void user_should_see_after_redirected_to_my_patient_with_edited_value_in_last_name(String result) {
+	Assert.assertTrue(
+			ElementUtil.getURL().toLowerCase().contains("mypatient"),"User is not redirected to My Patient page");
+	Assert.assertTrue(pom.getMyPatientsPage().isPatientNameDisplayedForAllRows());
+	String fieldName = "LastName";
+	 Assert.assertTrue(pom.getMyPatientsPage().doesDetailsColumnContainField(fieldName));
 }
 
 @When("User clicks submit after editing the email with {string}")
-public void user_clicks_submit_after_editing_the_email_with(String string) {
-	pom.getEditPatientPage().enterValue("email", string);
+public void user_clicks_submit_after_editing_the_email_with(String input_type) {
+	pom.getEditPatientPage().enterValue("email", input_type);
 	pom.getEditPatientPage().clickSubmit();
 }
 
 @Then("User should see {string} after redirected to my patient with edited value in Email field")
-public void user_should_see_after_redirected_to_my_patient_with_edited_value_in_email_field(String string) {
+public void user_should_see_after_redirected_to_my_patient_with_edited_value_in_email_field(String result) {
   
+	Assert.assertTrue(
+			ElementUtil.getURL().toLowerCase().contains("mypatient"),"User is not redirected to My Patient page");
+	Assert.assertTrue(pom.getMyPatientsPage().isPatientNameDisplayedForAllRows());
+	String fieldName = "Email";
+	 Assert.assertTrue(pom.getMyPatientsPage().doesDetailsColumnContainField(fieldName));
 }
 
 @When("User clicks submit after editing the CTC number with {string}")
-public void user_clicks_submit_after_editing_the_ctc_number_with(String string) {
-	pom.getEditPatientPage().enterValue("contact number", string);
+public void user_clicks_submit_after_editing_the_ctc_number_with(String input_type) {
+	pom.getEditPatientPage().enterValue("contact number", input_type);
 	pom.getEditPatientPage().clickSubmit();
 }
 
+@Then("User should see {string} after redirected to my patient with edited value in CTC number field")
+public void user_should_see_after_redirected_to_my_patient_with_edited_value_in_ctc_number_field(String result) {
+  
+	Assert.assertTrue(
+			ElementUtil.getURL().toLowerCase().contains("mypatient"),"User is not redirected to My Patient page");
+	Assert.assertTrue(pom.getMyPatientsPage().isPatientNameDisplayedForAllRows());
+	String fieldName = "Email";
+	 Assert.assertTrue(pom.getMyPatientsPage().doesDetailsColumnContainField(fieldName));
+}
+
 @When("User clicks submit after entering a {string} in the {string} field")
-public void user_clicks_submit_after_entering_a_in_the_field(String string, String string2) {
-	pom.getEditPatientPage().enterValue(string2, string);
+public void user_clicks_submit_after_entering_a_in_the_field(String validvalue, String field) {
+	pom.getEditPatientPage().enterValue(field, validvalue);
 	pom.getEditPatientPage().clickSubmit();
 }
 
 @Then("User should be redirected to the My Patient page with the updated {string} value as {string}")
-public void user_should_be_redirected_to_the_my_patient_page_with_the_updated_value_as(String string, String string2) {
-	
+public void user_should_be_redirected_to_the_my_patient_page_with_the_updated_value_as(String field, String validvalue) {
+	Assert.assertTrue(
+			ElementUtil.getURL().toLowerCase().contains("mypatient"),"User is not redirected to My Patient page");
+	Assert.assertTrue(pom.getMyPatientsPage().isPatientNameDisplayedForAllRows());
 }
 
-@When("User clicks {string} after being redirected to the My Patient page for updating {string} value")
-public void user_clicks_after_being_redirected_to_the_my_patient_page_for_updating_value(String string, String string2) {
+@When("User clicks View Previous Test Report after being redirected to the My Patient page for updating {string} value")
+public void user_clicks_view_previous_test_report_after_being_redirected_to_the_my_patient_page_for_updating_value(String string) {
     
 }
 
@@ -210,12 +245,12 @@ public void user_should_see_under_vitals_column_in_new_record_number(String stri
 }
 
 @When("User clicks submit after entering a valid {string} in the {string} field only")
-public void user_clicks_submit_after_entering_a_valid_in_the_field_only(String string, String string2) {
-	pom.getEditPatientPage().enterValue(string2, string);
+public void user_clicks_submit_after_entering_a_valid_in_the_field_only(String value, String field) {
+	pom.getEditPatientPage().enterValue(field, value);
 
-	if ("sp".equalsIgnoreCase(string2)) {
+	if ("sp".equalsIgnoreCase(field)) {
 		pom.getEditPatientPage().clearField("dp");
-	} else if ("dp".equalsIgnoreCase(string2)) {
+	} else if ("dp".equalsIgnoreCase(field)) {
 		pom.getEditPatientPage().clearField("sp");
 	}
 
@@ -223,21 +258,24 @@ public void user_clicks_submit_after_entering_a_valid_in_the_field_only(String s
 }
 
 @Then("User should receive error message in {string} field")
-public void user_should_receive_error_message_in_field(String string) {
-	Assert.assertTrue(pom.getEditPatientPage().isErrorMessageDisplayed(string),
-			"Expected field error is not displayed for: " + string);
+public void user_should_receive_error_message_in_field(String other_field) {
+	Assert.assertTrue(pom.getEditPatientPage().isErrorMessageDisplayed(other_field),
+			"Expected field error is not displayed for: " + other_field);
 }
 
 @When("User clicks submit after entering valid values in SP {string} and DP {string} fields")
-public void user_clicks_submit_after_entering_valid_values_in_sp_and_dp_fields(String string, String string2) {
-	pom.getEditPatientPage().enterValue("sp", string);
-	pom.getEditPatientPage().enterValue("dp", string2);
+public void user_clicks_submit_after_entering_valid_values_in_sp_and_dp_fields(String sp, String dp) {
+	pom.getEditPatientPage().enterValue("sp", sp);
+	pom.getEditPatientPage().enterValue("dp", dp);
 	pom.getEditPatientPage().clickSubmit();
 }
 
 @Then("User should be redirected to My Patient page")
 public void user_should_be_redirected_to_my_patient_page() {
-  
+	
+	Assert.assertTrue(
+			ElementUtil.getURL().toLowerCase().contains("mypatient"),"User is not redirected to My Patient page");
+	Assert.assertTrue(pom.getMyPatientsPage().isPatientNameDisplayedForAllRows());
 }
 
 @When("User clicks View Previous Test Report after being redirected to the My Patient page for updating the SP {string} and DP {string} value")
@@ -251,14 +289,15 @@ public void user_should_see_result_for_the_update_value_sp_and_dp_value(String s
 }
 
 @When("User clicks submit after entering {string} in {string} field")
-public void user_clicks_submit_after_entering_in_field(String string, String string2) {
-	pom.getEditPatientPage().enterValue(string2, string);
+public void user_clicks_submit_after_entering_in_field(String input_type, String field) {
+	pom.getEditPatientPage().enterValue(field, input_type);
 	pom.getEditPatientPage().clickSubmit();
 }
 
-@Then("User should see the error message {string}")
-public void user_should_see_the_error_message(String string) {
-
+@Then("User should see the error message {string} for invalid inputs in the vitals fields")
+public void user_should_see_the_error_message_for_invalid_inputs_in_the_vitals_fields(String error_message) {
+	Assert.assertTrue(pom.getEditPatientPage().isErrorMessageDisplayed(error_message),
+			"Expected error message is not displayed: " + error_message);
 }
 
 @When("User performs {string} on Date of Birth field")
@@ -321,8 +360,35 @@ public void user_clicks_after_being_redirected_to_the_my_patient_page_for_upload
 }
 
 @When("User clicks submit after {string}")
-public void user_clicks_submit_after(String string) {
+public void user_clicks_submit_after(String action) {
    
+	switch (action.trim().toLowerCase()) {
+	case "uploading a file with an invalid file type - docx":
+		pom.getEditPatientPage().uploadFile(ConfigReader.getProperty("file.docx"));
+		break;
+
+	case "uploading invalid file type - jpeg":
+		pom.getEditPatientPage().uploadFile(ConfigReader.getProperty("file.jpeg"));
+		break;
+
+	case "uploading a file larger than allowed size":
+		pom.getEditPatientPage().uploadFile(ConfigReader.getProperty("file.large"));
+		break;
+
+	case "uploading without any file":
+		break;
+
+	default:
+	}
+
+	pom.getEditPatientPage().clickSubmit();
+
+}
+
+@Then("User should see the error message {string} for invalid file upload scenarios")
+public void user_should_see_the_error_message_for_invalid_file_upload_scenarios(String error_message) {
+	Assert.assertTrue(pom.getEditPatientPage().isErrorMessageDisplayed(error_message),
+			"Expected error message is not displayed: " + error_message);
 }
 
 @When("User clicks the Close button")
@@ -332,7 +398,12 @@ public void user_clicks_the_close_button() {
 
 @Then("User should redirect to My Patient Page")
 public void user_should_redirect_to_my_patient_page() {
+	
+	Assert.assertTrue(
+			ElementUtil.getURL().toLowerCase().contains("mypatient"),"User is not redirected to My Patient page");
+	Assert.assertTrue(pom.getMyPatientsPage().isPatientNameDisplayedForAllRows());
 }
+
 
 @When("User clicks the Close button after entering the values")
 public void user_clicks_the_close_button_after_entering_the_values() {
@@ -344,6 +415,9 @@ public void user_clicks_the_close_button_after_entering_the_values() {
 @Then("User should redirect on the My patient Page without saving changes")
 public void user_should_redirect_on_the_my_patient_page_without_saving_changes() {
   
+	Assert.assertTrue(
+			ElementUtil.getURL().toLowerCase().contains("mypatient"),"User is not redirected to My Patient page");
+	Assert.assertTrue(pom.getMyPatientsPage().isPatientNameDisplayedForAllRows());
 }
 
 
