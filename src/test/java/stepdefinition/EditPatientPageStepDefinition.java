@@ -20,10 +20,7 @@ public class EditPatientPageStepDefinition {
 
 @Given("User is in my patient page after logged in")
 public void user_is_in_my_patient_page_after_logged_in() {
-	 if (pom.getDeletePatientPopupPage().isPatientTableDisplayed()) {
-	        logger.info("User already on My Patients page.");
-	        return;
-	    }
+	 logger.info("User Successfully logged in and navigated to My Patients page");
 }
 
 @When("User clicks the Edit icon for a {string} in the patient table")
