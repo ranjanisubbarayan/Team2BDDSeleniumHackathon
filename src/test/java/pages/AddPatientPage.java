@@ -58,20 +58,23 @@ public class AddPatientPage {
 	@FindBy (id =("DP"))
 	private WebElement dP;	
 	
-	@FindBy (xpath =("//select") )
+	@FindBy (xpath =("//select"))
 	private List<WebElement> dropDownCount ;
 	
-	@FindBy (xpath =("//select[@id='cuisine']/option") )
+	@FindBy (xpath =("//select[@id='cuisine']/option"))
 	private List<WebElement> cuisineOptions ;
 	
-	@FindBy (xpath =("//select[@id='foodPreference']/option") )
+	@FindBy (xpath =("//select[@id='foodPreference']/option"))
 	private List<WebElement> foodOptions ;
 	
-	@FindBy (xpath =("//select[@id='allergies']/option") )
+	@FindBy (xpath =("//select[@id='allergies']/option"))
 	private List<WebElement> allergiesOptions ;
 	
 	@FindBy (xpath = ("//input[not(@type='file') and not(@type='date')]"))
 	private List<WebElement> inputFields;
+	
+	@FindBy (xpath = ("//label[contains(text(),'*')]"))
+	private List<WebElement> mandatoryFields;
 	
 	@FindBy (xpath = ("//input[@type = 'file']"))
 	private List<WebElement> uploadFile;
@@ -100,6 +103,98 @@ public class AddPatientPage {
 		return uploadFile.size();
 		}
 	
+	public void clickSubmitButton() {
+		submit.click();
+	}
+	
+	public void clickCloseButton() {
+		close.click();
+	}
+	
+	public boolean isButtonVisible(String btnName) {
+		return driver.findElement(By.xpath("//button[text()='" + btnName + "']")).isDisplayed();
+	}
+	
+	public boolean isButtonEnabled(String btnName) {
+		return driver.findElement(By.xpath("//button[text()='" + btnName + "']")).isEnabled();
+	}
+	
+	public boolean isDatePickerVisible() {
+		return DOB.isDisplayed();
+	}
+	
+	public void selectDatePicker() {
+	DOB.click();
+	}
+	public void validateDateFormat(String year,String month,String date) {
+	
+	while(true) {
+		String currentMonth = driver.findElement(By.xpath("//span[@class='datepicker-month']")).getText();
+		String currentYear = driver.findElement(By.xpath("//span[@class='datepicker-year']")).getText();
+			
+	if(currentMonth.equals(month) && currentYear.equals(year))
+	{
+		break;
+	}
+	driver.findElement(By.xpath("//span[@class='circle-trianle-next']")).click();
+	//driver.findElement(By.xpath("//span[@class='circle-trianle-past']")).click();
+	}
+	List<WebElement> allDates=driver.findElements
+			(By.xpath("//table[@class='datepicker-calender']//tbody//td//a"));
+	for (WebElement dates:allDates){
+		if(dates.getText().equals(date)){
+			dates.click();
+			break;
+		}
+		}
+}
+	public String getSelectedDate() {
+	    return DOB.getAttribute("value");
+	}
+
+	public boolean isMandatoryFieldsVisible(String fieldName) {
+		for (WebElement label : mandatoryFields) {
+			if (label.getText().contains(fieldName)) {
+				return label.isDisplayed();
+			}}
+				return false;
+			}
+	
+	public boolean isOptionalFieldsVisible(String fieldName) {
+		switch(fieldName) {
+		case "Weight": return weight.isDisplayed();
+		case "Height": return height.isDisplayed();
+		case "Temperature": return temp.isDisplayed();
+		case "SP": return sP.isDisplayed();
+		case "DP": return dP.isDisplayed();
+		default:
+           System.out.println("Unknown optional field: " + fieldName);			
+		return false;
+		}
+	}
+		public String getErrorMessage(String fieldName) {
+		    switch (fieldName) {
+		        case "First Name":
+		            return "First Name is required";
+		        case "Last Name":
+		            return "Last Name is required";
+		        case "Email":
+		            return "Email is required";
+		        case "Contact Number":
+		            return "Contact Number is required";
+		        case "Date of Birth":
+		            return "Date of Birth is required";
+		        default:
+		            return "Field is required"; 
+		    }
+		
+	}
 	
 	
+	
+	
+	
+	
+	
+		
 }

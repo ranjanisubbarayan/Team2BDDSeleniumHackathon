@@ -58,54 +58,72 @@ public class AddPatientStepDefinition {
 
 	    @Then("User should see {string} button")
 	    public void user_should_see_button(String buttonName) {
-	        
+	        Assert.assertTrue(pom.getAddPatient().isButtonVisible(buttonName), 
+	        		           buttonName +"button is not visible" );
 	    }
 
 	    @Then("User should see {string} button is {string}")
 	    public void user_should_see_button_is_state(String buttonName, String state) {
-	       
+	       boolean isEnabled = pom.getAddPatient().isButtonEnabled(buttonName);
+	       if(state.equalsIgnoreCase("enabled")) {
+	    	   Assert.assertTrue(isEnabled,buttonName + "button is not enabled but is diabled");
+	       }
+	       if(state.equalsIgnoreCase("diabled")) {
+		    	   Assert.assertFalse(isEnabled,buttonName + "button is not diabled but is enabled");
+	       }
 	    }
 
 	  	    @Then("User should see date picker for {string}")
-	    public void user_should_see_date_picker_for(String fieldName) {
+	    public void user_should_see_date_picker_for() {
+	      pom.getAddPatient().isDatePickerVisible();
 	       
 	    }
 
 	    @Then("Date format should be {string}")
 	    public void date_format_should_be(String expectedFormat) {
-	      
-	    	
-	    }
+	    	pom.getAddPatient().selectDatePicker();
+		    pom.getAddPatient().validateDateFormat("2026","March","20");
+		    String actualDate = pom.getAddPatient().getSelectedDate();
+		    
+		    if(expectedFormat.equals("MM/DD/YYYY)")) {
+		    	Assert.assertTrue(actualDate.matches("\\d{2}/\\d{2}/\\d{4}"),
+		    			"Date foormat is Incorrect: " + actualDate);
+		    }
+		    }
 
 	   
 	    @Then("User should see placeholder {string} for mandatory field")
-	    public void user_should_see_placeholder_for_mandatory_field(String fieldName) {
-	        
+	    public void user_should_see_placeholder_for_mandatory_field(String field) {
+	        Assert.assertTrue(pom.getAddPatient().isMandatoryFieldsVisible(field),
+	        		"Manadatory field iss not visible: " + field );
 	    }
 
-	    @Then("User should see mandatory {string} dropdown with default placeholder")
-	    public void user_should_see_mandatory_dropdown_with_default_placeholder(String fieldName) {
-	    
-	    }
+//	    @Then("User should see mandatory {string} dropdown with default placeholder")
+//	    public void user_should_see_mandatory_dropdown_with_default_placeholder(String fieldName) {
+//	    
+//	    }
 
 	    @Then("User should see optional field {string}")
 	    public void user_should_see_optional_field(String fieldName) {
-	    	
+	    	boolean isVisible = pom.getAddPatient().isOptionalFieldsVisible(fieldName);
+	        Assert.assertTrue(isVisible, "Optional field not visible: " + fieldName);
 	    }
 	    
-	    @When("User clicks on {string} without entering {string}")
-	    public void user_clicks_submit_without_entering_field(String button, String field) {
-	       
+	    @When("User clicks on Submit without entering {string}")
+	    public void user_clicks_submit_without_entering_field(String field) {
+	       pom.getAddPatient().clickSubmitButton();
 	    }
 
 	    @Then("User should see error message {string}")
-	    public void user_should_see_error_message(String errorMessage) {
-	     
+	    public void user_should_see_error_message(String expectedErrorMessage, String fieldName) {
+	     String actualErrorMessage = pom.getAddPatient().getErrorMessage(fieldName);
+	     Assert.assertEquals(actualErrorMessage, expectedErrorMessage,
+	             "Error message mismatch for field: " + fieldName);
 	    }
 	    
 	    
-	    @When("User enters {string} in {string}")
-	    public void user_enters_value_in_field(String value, String field) {
+	    @When("User clicks Submit with {string}")
+	    public void user_clicks_submit_with(String field ) {
 	       
 	    }
 
