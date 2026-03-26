@@ -1,5 +1,6 @@
 package stepdefinition;
 
+import java.io.IOException;
 import java.util.Properties;
 
 import org.openqa.selenium.WebDriver;
@@ -13,6 +14,7 @@ import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import pages.PageObjectManager;
 import utils.ConfigReader;
+import utils.ExcelReader;
 import utils.ScreenShot;
 
 public class Hooks {
@@ -27,6 +29,9 @@ public class Hooks {
 
 		Properties prop = ConfigReader.initializeProperties();
 		logger.debug("Loaded configuration properties");
+		
+		ExcelReader.readDataFromExcel(prop.getProperty("loginsheetName"));
+		logger.info("Excel test data loaded");
 
 		String browser = System.getProperty("browserName", prop.getProperty("browserName"));
 		logger.info("Launching browser: {}", browser);
@@ -38,6 +43,28 @@ public class Hooks {
 		pom = new PageObjectManager();
 		logger.info("PageObjectManager initialized");
 	}
+	
+	@Before(value = "@Login", order = 1)
+	public void performLogin() throws IOException {
+		pom.getDashboardPage().clickLoginButton();
+		logger.info("Clicked  Login button");
+
+		pom.getLoginPage().login("Submits the login form", "valid_login");
+		logger.info("Performed login with valid credentials");
+	}
+	
+	@Before(value = "@MyPatient", order =2)
+	public void mypatientpage() {
+		
+		if (pom.getDeletePatientPopupPage().isPatientTableDisplayed()) {
+	        logger.info("User already on My Patients page");
+	        return;
+	    }else {
+	    	 pom.getDashboardPage().clickNavigationLink("My Patients");
+	    	 logger.info("Successfully navigated to My Patients page");
+	    }
+	}
+	
 
 	@AfterStep
 	public void screenShot(Scenario scenario) {

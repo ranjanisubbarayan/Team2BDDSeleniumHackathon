@@ -16,18 +16,20 @@ public class DashboardPage {
 	private WebDriver driver;
 	private static final Logger logger = LoggerFactory.getLogger(DashboardPage.class);
 
+	@FindBy(xpath = "//ul//a")
+	private List<WebElement> navlinks;
+
+	@FindBy(css = "i.fa-home")
+	private WebElement homeIcon;
+
+	@FindBy(xpath = "//a[@href='/login']")
+	private WebElement loginButton;
+
 	public DashboardPage() {
 		this.driver = DriverFactory.getDriver();
 		PageFactory.initElements(driver, this);
 		logger.info("DashboardPage initialized successfully.");
 	}
-
-	@FindBy(xpath = "//ul//a")
-	private List<WebElement> navlinks;
-	
-	@FindBy(css = "i.fa-home")
-	private WebElement homeIcon;
-
 
 	public List<String> getNavigationLinks() {
 		logger.info("Fetching navigation bar links.");
@@ -45,11 +47,14 @@ public class DashboardPage {
 		}
 		link.click();
 	}
-	
-	public void clickHomeIcon()
-	{
+
+	public void clickHomeIcon() {
 		logger.info("Clicking Home icon on navugation bar");
 		homeIcon.click();
+	}
+
+	public void clickLoginButton() {
+		loginButton.click();
 	}
 
 }
