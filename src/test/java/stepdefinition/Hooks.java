@@ -52,6 +52,19 @@ public class Hooks {
 		pom.getLoginPage().login("Submits the login form", "valid_login");
 		logger.info("Performed login with valid credentials");
 	}
+	
+	@Before(value = "@MyPatient", order =2)
+	public void mypatientpage() {
+		
+		if (pom.getDeletePatientPopupPage().isPatientTableDisplayed()) {
+	        logger.info("User already on My Patients page");
+	        return;
+	    }else {
+	    	 pom.getDashboardPage().clickNavigationLink("My Patients");
+	    	 logger.info("Successfully navigated to My Patients page");
+	    }
+	}
+	
 
 	@AfterStep
 	public void screenShot(Scenario scenario) {

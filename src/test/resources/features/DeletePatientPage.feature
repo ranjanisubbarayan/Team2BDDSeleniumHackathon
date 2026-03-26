@@ -1,4 +1,4 @@
-@DeletePatientPage
+@Login @MyPatient @DeletePatientPage
 
 Feature: Delete Patient Page Pop Up Validation
 

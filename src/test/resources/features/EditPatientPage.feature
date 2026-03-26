@@ -1,17 +1,23 @@
-@EditPatientPage @Login
+@Login @MyPatient @EditPatientPage 
 Feature: Edit Patient Page Dialog Box Validation 
 
 #Dialogbox validation
 
- Rule: Below scenario covers Edit page Dialog box validation
+Rule: Below scenario covers Edit page Dialog box validation
 
 Background: User logged into the app and patients already exists
 
 Given User is in my patient page after logged in
     
-Scenario: Verify Title of the dialog box
+Scenario Outline: Verify Title of the dialog box
 When User clicks the Edit icon for a "<patientname>" in the patient table
 Then User should see Edit Patient page on the dialog box
+
+Examples:
+| patientname |
+| Ram         |
+| Rama        |
+| Pragyan     |
  
 Scenario Outline: Verify presence of UI elements
 When User clicks the Delete icon for a "<patientname>" in the patient table
