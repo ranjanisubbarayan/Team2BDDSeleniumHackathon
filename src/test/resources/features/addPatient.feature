@@ -32,7 +32,7 @@ Feature: Add Patient
     Then User should see date picker for "Date of Birth"
     Then Date format should be "MM/DD/YYYY"
 
-    Scenario Outline: Verify mandatory field placeholders
+    Scenario Outline: mandatory field placeholders are visible
     Then User should see placeholder "<field>" for mandatory field
 
     Examples:
@@ -42,15 +42,18 @@ Feature: Add Patient
       | Email           |
       | Contact Number  |
       | Date of Birth   |
-
-   Scenario Outline: Verify mandatory dropdown placeholders
-    Then User should see mandatory "<field>" dropdown with default placeholder
-   
-   Examples:      
-      | field             |
       | Allergies         |
       | Food Preference   |
       | Cuisine Category  |
+
+   #Scenario Outline: Verify mandatory dropdown placeholders
+    #Then User should see mandatory "<field>" dropdown with default placeholder
+   #
+   #Examples:      
+      #| field             |
+      #| Allergies         |
+      #| Food Preference   |
+      #| Cuisine Category  |
 
   
   Scenario Outline: Verify optional vitals fields
@@ -66,7 +69,7 @@ Feature: Add Patient
       
   
     Scenario Outline: Verify error message for empty mandatory fields
-    When User clicks on "Submit" without entering "<field>"
+    When User clicks on Submit without entering "<field>"
     Then User should see error message "<error_message>"
 
     Examples:
@@ -77,15 +80,36 @@ Feature: Add Patient
       | Contact Number  | Contact Number is required  |
       | Date of Birth   | Date of Birth is required   |
 
-   Scenario Outline: Verify invalid input formats
-    When User enters "<value>" in "<field>"
-    Then User should see validation message "<message>"
+   Scenario Outline: Verify invalid data from Excel
+    When User clicks Submit with "<scenarioType>"
+    Then User should see validation message "<expected_Message>"
 
     Examples:
-      | field           | value        | message                     |
-      | Email           | abc.com      | Invalid email format        |
-      | Contact Number  | 123          | Invalid contact number      |
-      | First Name      | 1234         | Invalid name format         |
+    | scenarioType                    |      expected_Message             |
+    |first name with numeric data     | Patient first name accepts only alphabets|
+    |first name with special character data | Patient first name accepts only alphabets|
+    |Mandatory check for firstname field   | Firstname field is required|
+    |last name with  numeric data      | Patient last name accepts only alphabets|
+    |last name with special character data |Patient last name accepts only alphabets|
+    |Mandatory check for lastname          | Lastname field is required|
+    |email with  starts with number    | Please enter a valid email address|
+    |email without @ symbol            | Please enter a valid email address|
+    |email with special characters     | Please enter a valid email address|
+    |email without .com                | Please enter a valid email address|
+    |Existing email id                     | Email id already exists|
+    |Mandatory check for email field | Email field is required|
+    |contact no. with alphabets     | Contact number accepts only numeric values|
+    |contact no. with special characters | Contact number accepts only numeric values|
+    |contact no. with less than ten digits | Please enter a valid contact number|
+    |contact no. with greater ten digits | Please enter a valid contact number|
+    |Existing contact number             | Contact number already exists|
+    |Mandatory field check for contact num | Contact Num is required|
+    |Leaving Allergies field empty    | Allergies is required|
+    |Leaving Food Preference empty    | Food Preference is required|
+    |Leaving Cusine Category field empty| Cuisine Category is required|
+    |Leaving DOB field empty            |Date is required|
+    
+       
 
  
   Scenario: Verify Submit button remains disabled for incomplete form
@@ -93,7 +117,7 @@ Feature: Add Patient
     Then User should see "Submit" button is disabled
 
    Scenario: Verify Submit button is enabled when form is valid
-    When User enters valid data in all mandatory fields
+    When User enters valid data in all mandatory fields from <sheetName> 
     Then User should see "Submit" button is enabled
 
   Scenario: Verify Close button functionality
