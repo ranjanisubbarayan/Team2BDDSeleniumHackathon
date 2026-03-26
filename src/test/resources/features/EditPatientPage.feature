@@ -20,7 +20,7 @@ Examples:
 | Pragyan     |
  
 Scenario Outline: Verify presence of UI elements
-When User clicks the Delete icon for a "<patientname>" in the patient table
+When User clicks the Edit icon for a "<patientname>" in the patient table
 Then User should see "<fieldName>" in the editpage
 
 Examples:
@@ -100,7 +100,7 @@ Examples:
 | Pragyan     |
 Scenario Outline: Verify Presence of No File Choosen text when no files uploaded
 When User clicks the Edit icon for a "<patientname>" in the patient table
-Then User should see "No File Choosen" text
+Then User should see No File Choosen text
 Examples:
 | patientname |
 | Ram         |
@@ -125,11 +125,11 @@ When User clicks edit icon for the particular patient
 
 
 Scenario Outline: Verify Presence of placeholder in fields
-When User clears existing value in "<field>" field
+When User clears existing value in "<fieldname>" field
 Then User should see placeholder "<placeholdername>"
 
 Examples:
-| field| placeholdername|
+| fieldname| placeholdername|
 | first name| First name|
 | last name| Last name|
 | email| Email|
@@ -173,7 +173,7 @@ Examples:
 
 Scenario Outline: Verify edit CTC number with different inputs
 When User clicks submit after editing the CTC number with "<input_type>"
-Then User should see "<result>"
+Then User should see "<result>" after redirected to my patient with edited value in CTC number field
 
 Examples:
 | input_type | result|
@@ -193,7 +193,7 @@ Examples:
   | temperature | 98.6  |
 
 Scenario Outline: Verify presence of updated value for "<field>"
-When User clicks "View Previous Test Report" after being redirected to the My Patient page for updating "<field>" value
+When User clicks View Previous Test Report after being redirected to the My Patient page for updating "<field>" value
 Then User should see "<newvalue>" under vitals column in new record number
 
 Examples:
@@ -233,7 +233,7 @@ Examples:
   
 Scenario Outline: Verify invalid inputs for vitals fields
 When User clicks submit after entering "<input_type>" in "<field>" field
-Then User should see the error message "<error_message>"
+Then User should see the error message "<error_message>" for invalid inputs in the vitals fields
 
 
 Examples:
@@ -296,7 +296,7 @@ Scenario Outline: Verify presence of fields after file upload
 When User clicks submit after uploading a valid file
 Then User should be redirected to My Patient page with the uploaded file saved successfully
 When  User clicks "View Previous Test Report" after being redirected to the My Patient page for uploaded health report
-Then User should see "<result>"
+Then User should see "<result>" after file upload
 
 Examples:
 | result|
@@ -307,7 +307,7 @@ Examples:
 
 Scenario Outline: Verify invalid file upload scenarios
 When User clicks submit after "<action>"
-Then User should see the error message "<error_message>"
+Then User should see the error message "<error_message>" for invalid file upload scenarios
 
 Examples:
 | action| error_message|
