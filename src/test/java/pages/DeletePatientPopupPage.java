@@ -17,43 +17,43 @@ import utils.WaitUtils;
 public class DeletePatientPopupPage {
 
 	private final WebDriver driver;
-    private final WaitUtils waitUtils;
-    private static final Logger logger = LoggerFactory.getLogger(DeletePatientPopupPage.class);
+	private final WaitUtils waitUtils;
+	private static final Logger logger = LoggerFactory.getLogger(DeletePatientPopupPage.class);	
 
-    public DeletePatientPopupPage() {
-        this.driver = DriverFactory.getDriver();
-        this.waitUtils = new WaitUtils();
-        PageFactory.initElements(driver, this);
-        logger.info("DeletePatientPopup initialized successfully.");
-    }
-    
-    @FindBy(xpath = "//table")
+	@FindBy(xpath = "//table")
 	private WebElement patientTable;
-    
+
 	@FindBy(xpath = "//table//tbody//tr")
 	private List<WebElement> patientRows;
-    
+
 	@FindBy(xpath = "//*[normalize-space()='Confirm']")
 	private WebElement DeletepopupTitle;
-	
+
 	@FindBy(xpath = "//*[normalize-space()='Are you sure to delete']")
 	private WebElement DeletepopupAlerttext;
-	
+
 	@FindBy(xpath = "//button[normalize-space()='Yes']")
 	private WebElement YesButton;
 
 	@FindBy(xpath = "//button[normalize-space()='No']")
 	private WebElement NoButton;
-	
+
 	@FindBy(xpath = "//*[contains(text(),'deleted')]")
 	private WebElement successMessages;
-    
+
 	@FindBy(xpath = "(//table//tr[1]//*[contains(@class,'delete') or contains(text(),'Delete')])")
 	private WebElement firstRowDeleteIcon;
-	
+
 	@FindBy(xpath = "//*[@role='dialog']//*[text()='X' or text()='x']")
 	private WebElement popupCloseIcon;
 	
+	public DeletePatientPopupPage() {
+		this.driver = DriverFactory.getDriver();
+		this.waitUtils = new WaitUtils();
+		PageFactory.initElements(driver, this);
+		logger.info("DeletePatientPopup initialized successfully.");
+	}
+
 	public String getAlertTitle() {
 		logger.info("Fetching delete popup title");
 		return WaitUtils.getVisibleText(driver, DeletepopupTitle, 10);
@@ -83,20 +83,20 @@ public class DeletePatientPopupPage {
 		logger.info("Clicking No button on delete popu");
 		waitUtils.waitForClickable(NoButton).click();
 	}
-	
+
 	public boolean isPatientTableDisplayed() {
 		return WaitUtils.isVisible(driver, patientTable, 10);
 	}
-	
+
 	public int getPatientRowCount() {
 		logger.info("Fetching patient row count");
 		return patientRows.size();
 	}
-	
+
 	public String getFirstPatientName() {
 		try {
-			WebElement patientName = driver.findElement(
-				By.xpath("(//table//tbody//tr[1]//td[2])[1] | (//table//tbody//tr[1]//*[contains(text(),' ')])[1]"));
+			WebElement patientName = driver.findElement(By
+					.xpath("(//table//tbody//tr[1]//td[2])[1] | (//table//tbody//tr[1]//*[contains(text(),' ')])[1]"));
 			String name = patientName.getText().trim();
 			logger.info("Captured first patient name {}", name);
 			return name;
@@ -105,46 +105,48 @@ public class DeletePatientPopupPage {
 			return "";
 		}
 	}
-	
+
 	public void clickDeleteIconForfirstRowPatient() {
 		logger.info("Clicking delete icon for first patient row");
 		waitUtils.waitForClickable(firstRowDeleteIcon).click();
 	}
-	
+
 	public WebElement getDeleteIconByPatientName(String patientName) {
-	    for (WebElement row : patientRows) {
-	        if (row.getText().contains(patientName)) {
-	            return row.findElement(By.xpath( ".//*[contains(@class,'delete') or contains(@title,'Delete') or contains(text(),'Delete')]"
-	            ));
-	        }
-	    }
-	    throw new RuntimeException("Patient not found: " + patientName);
+		for (WebElement row : patientRows) {
+			if (row.getText().contains(patientName)) {
+				return row.findElement(By.xpath(
+						".//*[contains(@class,'delete') or contains(@title,'Delete') or contains(text(),'Delete')]"));
+			}
+		}
+		throw new RuntimeException("Patient not found: " + patientName);
 	}
+
 	public void clickPopupCloseIcon() {
 		logger.info("Clicking popup close icon");
 		waitUtils.waitForClickable(popupCloseIcon).click();
 	}
-	
+
 	public void acceptAlertIfBrowserAlertPresent() {
 		try {
 			driver.switchTo().alert().accept();
-				} catch (NoAlertPresentException e) {
-					clickYes();
+		} catch (NoAlertPresentException e) {
+			clickYes();
 		}
 	}
 
 	public void dismissAlertIfBrowserAlertPresent() {
 		try {
 			driver.switchTo().alert().dismiss();
-			} catch (NoAlertPresentException e) {
-				clickNo();
+		} catch (NoAlertPresentException e) {
+			clickNo();
 		}
 	}
-	
+
 	public boolean isSuccessMessageDisplayed() {
 		logger.info("Checking success message visibility.");
 		return WaitUtils.isVisible(driver, successMessages, 10);
 	}
+
 	public boolean isPopupClosed() {
 		try {
 			return !DeletepopupTitle.isDisplayed();
@@ -152,8 +154,10 @@ public class DeletePatientPopupPage {
 			return true;
 		}
 	}
+
 	public boolean isPatientStillPresentInTable(String patientName) {
-			List<WebElement> name = driver.findElements(By.xpath("//table//tr//td[contains(text(),'" + patientName + "')]"));
+		List<WebElement> name = driver
+				.findElements(By.xpath("//table//tr//td[contains(text(),'" + patientName + "')]"));
 		return !name.isEmpty();
 	}
 

@@ -48,6 +48,26 @@ public class DashboardPage {
 		link.click();
 	}
 
+	public void clickMyPatientsLink() {
+		logger.info("Clicking My Patients link");
+		clickNavigationLink("My Patients");
+	}
+
+	public void clickNewPatientLink() {
+		logger.info("Clicking New Patient link");
+		clickNavigationLink("New Patient");
+	}
+
+	public void clickLoginLink() {
+		logger.info("Clicking Login link");
+		clickNavigationLink("Login");
+	}
+
+	public void clickLogoutLink() {
+		logger.info("Clicking Logout link");
+		clickNavigationLink("Logout");
+	}
+
 	public void clickHomeIcon() {
 		logger.info("Clicking Home icon on navugation bar");
 		homeIcon.click();
