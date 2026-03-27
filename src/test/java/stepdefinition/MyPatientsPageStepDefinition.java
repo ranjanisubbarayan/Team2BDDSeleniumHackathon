@@ -410,7 +410,7 @@ public class MyPatientsPageStepDefinition
 			pom.getMyPatientsPage().clickNextPage();
 		}
 
-		@Then("Pagination controls should be displayed")
+		@Then("Pagination controls should be displayed on Mt Patients page")
 		public void pagination_controls_should_be_displayed() {
 		   Assert.assertTrue(pom.getMyPatientsPage().arePaginationControlsDisplayed(), "Pagination control are not displayed");
 		}
