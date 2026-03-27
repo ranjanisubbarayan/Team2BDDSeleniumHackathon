@@ -3,6 +3,7 @@ package stepdefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
+
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -10,32 +11,31 @@ import pages.PageObjectManager;
 import utils.ElementUtil;
 
 public class DeletePatientPageStepDefinition {
-	
+
 	private final PageObjectManager pom;
 	private static final Logger logger = LoggerFactory.getLogger(DeletePatientPageStepDefinition.class);
 
 	public DeletePatientPageStepDefinition(PageObjectManager pom) {
 		this.pom = pom;
 	}
-	
+
 	private String selectedPatientName;
 	private int rowCountBeforeDelete;
-	
-	@Given("User is in my patient page after logged in")
-	public void user_is_in_my_patient_page_after_logged_in() {
-		logger.info("User Successfully logged in and navigated to My Patients page");
+
+	@Given("User is on My Patients page to delete a patient")
+	public void user_is_on_my_patients_page_to_delete_a_patient() {
+		logger.info("User is on My Patients page to delete a patient");
 	}
 
 	@When("User clicks the Delete icon for a {string} in the patient table")
 	public void user_clicks_the_delete_icon_for_a_in_the_patient_table(String patientname) {
-		
-	    if (patientname != null && !patientname.trim().isEmpty()) {
-	    	pom.getDeletePatientPopupPage().getDeleteIconByPatientName(patientname);
-	    } else {
-	    	pom.getDeletePatientPopupPage().clickDeleteIconForfirstRowPatient();
-	    }
-	}
 
+		if (patientname != null && !patientname.trim().isEmpty()) {
+			pom.getDeletePatientPopupPage().getDeleteIconByPatientName(patientname);
+		} else {
+			pom.getDeletePatientPopupPage().clickDeleteIconForfirstRowPatient();
+		}
+	}
 
 	@Then("Alert should display {string} {string} in the delete popup section")
 	public void alert_should_display_in_the_delete_popup_section(String elementtype, String Expectedresults) {
@@ -53,7 +53,8 @@ public class DeletePatientPageStepDefinition {
 			String actualText = pom.getDeletePatientPopupPage().getAlertText();
 			logger.info("Actual alert text: {}", actualText);
 
-			if (Expectedresults.contains("[Patient Name]") && selectedPatientName != null && !selectedPatientName.isEmpty()) {
+			if (Expectedresults.contains("[Patient Name]") && selectedPatientName != null
+					&& !selectedPatientName.isEmpty()) {
 				String expectedText = Expectedresults.replace("[Patient Name]", selectedPatientName);
 				Assert.assertEquals(actualText, expectedText, "Alert text mismatch");
 			} else {
@@ -72,16 +73,15 @@ public class DeletePatientPageStepDefinition {
 			break;
 
 		default:
-			
+
 		}
 	}
-		
 
 	@When("User {string} the alert in the delete popup")
 	public void user_the_alert_in_the_delete_popup(String action) {
-		
+
 		logger.info("Performing alert action: {}", action);
-		
+
 		switch (action.trim().toLowerCase()) {
 		case "accepts":
 			pom.getDeletePatientPopupPage().acceptAlertIfBrowserAlertPresent();
@@ -91,24 +91,26 @@ public class DeletePatientPageStepDefinition {
 			pom.getDeletePatientPopupPage().dismissAlertIfBrowserAlertPresent();
 			break;
 		default:
-			
+
 		}
-	   
+
 	}
 
 	@Then("User should {string} in the dietician application")
 	public void user_should_in_the_dietician_application(String expectedresult) {
-	    
+
 		switch (expectedresult.trim().toLowerCase()) {
 		case "navigated back to main page":
 			String currentUrl = ElementUtil.getURL();
 			logger.info("Current URL after alert action: {}", currentUrl);
-			Assert.assertTrue(currentUrl.toLowerCase().contains("mypatient"),"User is not navigated back to main page");
+			Assert.assertTrue(currentUrl.toLowerCase().contains("mypatient"),
+					"User is not navigated back to main page");
 			break;
 
 		case "patient removed from the table and success message displayed":
 			if (selectedPatientName != null && !selectedPatientName.isEmpty()) {
-				Assert.assertTrue(pom.getDeletePatientPopupPage().isPatientRemovedFromTable(selectedPatientName),"Patient is still present in the table after delete confirmation");
+				Assert.assertTrue(pom.getDeletePatientPopupPage().isPatientRemovedFromTable(selectedPatientName),
+						"Patient is still present in the table after delete confirmation");
 			} else {
 				int rowCountAfterDelete = pom.getDeletePatientPopupPage().getPatientRowCount();
 				Assert.assertTrue(rowCountAfterDelete < rowCountBeforeDelete,
@@ -120,8 +122,8 @@ public class DeletePatientPageStepDefinition {
 			break;
 
 		case "alert closed and patient remains in the table":
-			
-			 pom.getDeletePatientPopupPage().clickPopupCloseIcon();
+
+			pom.getDeletePatientPopupPage().clickPopupCloseIcon();
 			Assert.assertTrue(pom.getDeletePatientPopupPage().isPopupClosed(),
 					"Delete popup is still displayed after dismissing");
 
@@ -132,10 +134,7 @@ public class DeletePatientPageStepDefinition {
 			break;
 
 		default:
-			
+
 		}
 	}
-	}
-
-
-
+}

@@ -7,7 +7,7 @@ Rule: Below scenario covers Edit page Dialog box validation
 
 Background: User logged into the app and patients already exists
 
-Given User is in my patient page after logged in
+Given User is in my patient page for editing a patient after logged in
     
 Scenario Outline: Verify Title of the dialog box in the edit patient page
 When User clicks the Edit icon for a "<patientname>" in the patient table
