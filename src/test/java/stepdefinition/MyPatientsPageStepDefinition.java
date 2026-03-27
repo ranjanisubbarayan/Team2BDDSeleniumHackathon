@@ -33,8 +33,8 @@ public class MyPatientsPageStepDefinition
 
 		@When("User clicks on My Patients button")
 		public void user_clicks_on_my_patients_button() {
-		//pom.getDashboardPage().clickMyPatientsButton();
-		    
+		pom.getDashboardPage().clickMyPatientsLink();
+			
 		}
 
 		@Then("Page header {string} should be displayed")

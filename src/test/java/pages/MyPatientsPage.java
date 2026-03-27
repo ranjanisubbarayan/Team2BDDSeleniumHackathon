@@ -23,14 +23,6 @@ public class MyPatientsPage
 	 private final WaitUtils waitUtils;
 	private static final Logger logger = LoggerFactory.getLogger(MyPatientsPage.class);
 
-	public MyPatientsPage() 
-	{
-		this.driver = DriverFactory.getDriver();
-		 this.waitUtils = new WaitUtils();
-		PageFactory.initElements(driver, this);
-		
-	}
-
 	@FindBy(xpath=("//button[contains(text(),'My Patients')]"))
 			private WebElement myPatientsButton;
 	@FindBy(xpath=("//h1[contains(text(),'My Patients')]"))
@@ -81,14 +73,16 @@ public class MyPatientsPage
           private WebElement paginationInfo;
      @FindBy(xpath = "//span[@class='current-page']")
            private WebElement currentPageNumber;
+       
+     public MyPatientsPage() 
+ 	{
+ 		this.driver = DriverFactory.getDriver();
+ 		 this.waitUtils = new WaitUtils();
+ 		PageFactory.initElements(driver, this);
+ 		
+ 	}
 
-
-
-	public void clickMyPatientsButton()
-	{
-		logger.info("Clicking My patients button on Dashboard page");
-		waitUtils.waitForClickable(myPatientsButton).click();
-	}
+	
 	public String getPageHeader()
 	{
 		logger.info("Returning MyPatients Title ");

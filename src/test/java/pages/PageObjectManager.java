@@ -8,6 +8,7 @@ public class PageObjectManager {
 	private DeletePatientPopupPage deletePatientPopupPage;
 	private AddPatientPage addPatient;
 	private LoginPage loginPage;
+	private ViewTestReportPage viewTestReportPage;
 
 	public DashboardPage getDashboardPage() {
 		if (dashboardPage == null) {
@@ -49,6 +50,13 @@ public class PageObjectManager {
 			loginPage = new LoginPage();
 		}
 		return loginPage;
+	}
+
+	public ViewTestReportPage getViewTestReportPage() {
+		if (viewTestReportPage == null) {
+			viewTestReportPage = new ViewTestReportPage();
+		}
+		return viewTestReportPage;
 	}
 
 }

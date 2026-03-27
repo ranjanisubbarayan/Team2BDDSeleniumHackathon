@@ -1,0 +1,49 @@
+[1mdiff --git a/.project b/.project[m
+[1mindex 29adff5..6edd63d 100644[m
+[1m--- a/.project[m
+[1m+++ b/.project[m
+[36m@@ -15,8 +15,19 @@[m
+ 			<arguments>[m
+ 			</arguments>[m
+ 		</buildCommand>[m
+[32m+[m		[32m<buildCommand>[m
+[32m+[m			[32m<name>cucumber.eclipse.builder.stepdefinition</name>[m
+[32m+[m			[32m<arguments>[m
+[32m+[m			[32m</arguments>[m
+[32m+[m		[32m</buildCommand>[m
+[32m+[m		[32m<buildCommand>[m
+[32m+[m			[32m<name>cucumber.eclipse.builder.gherkin</name>[m
+[32m+[m			[32m<arguments>[m
+[32m+[m			[32m</arguments>[m
+[32m+[m		[32m</buildCommand>[m
+ 	</buildSpec>[m
+ 	<natures>[m
+[32m+[m		[32m<nature>cucumber.eclipse.nature</nature>[m
+ 		<nature>org.eclipse.jdt.core.javanature</nature>[m
+ 		<nature>org.eclipse.m2e.core.maven2Nature</nature>[m
+ 	</natures>[m
+[1mdiff --git a/src/test/java/pages/PageObjectManager.java b/src/test/java/pages/PageObjectManager.java[m
+[1mindex b39bc2c..67c77b1 100644[m
+[1m--- a/src/test/java/pages/PageObjectManager.java[m
+[1m+++ b/src/test/java/pages/PageObjectManager.java[m
+[36m@@ -3,6 +3,7 @@[m [mpackage pages;[m
+ public class PageObjectManager {[m
+ 	[m
+ 	private DashboardPage dashboardPage;[m
+[32m+[m	[32mprivate AddPatientPage addPatient;[m
+ [m
+ 	public DashboardPage getDashboardPage() {[m
+ 		if (dashboardPage == null) {[m
+[36m@@ -10,5 +11,12 @@[m [mpublic class PageObjectManager {[m
+ 		}[m
+ 		return dashboardPage;[m
+ 	}[m
+[32m+[m[41m	[m
+[32m+[m	[32mpublic AddPatientPage getAddPatient() {[m
+[32m+[m		[32mif (addPatient == null) {[m
+[32m+[m			[32maddPatient = new AddPatientPage();[m
+[32m+[m		[32m}[m
+[32m+[m		[32mreturn addPatient;[m
+[32m+[m	[32m}[m
+ [m
+ }[m
