@@ -51,18 +51,18 @@ Examples:
 
 Scenario Outline: Verify presence of patient details in the edit patient page
 When User clicks the Edit icon for a "<patientname>" in the patient table
-Then User should see the "<field_name>" field populated with the "<expectedvalue>" entered during patient creation
+Then User should see the "<field_name>" field populated with the "<expected_value>" entered during patient creation
 
 Examples:
-| patientname|field_name|expected_value|
-| Rama|First Name| Rama|
-| Rama|Last Name| kumar|
-| Rama|Email| ry@gmail.com|
-| Rama|Contact Number| 1234567890|
-| Rama|Allergy| None|
-| Rama|Food Preference| Veg|
-| Rama|Cuisine Category| Indian|
-| Rama|Date of Birth| 31/07/1985|
+| patientname | field_name     | expected_value |
+| Rama        | First Name     | Rama           |
+| Rama        | Last Name      | kumar          |
+| Rama        | Email          | ry@gmail.com   |
+| Rama        | Contact Number | 1234567890     |
+| Rama        | Allergy        | None           |
+| Rama        | Food Preference| Veg            |
+| Rama        | Cuisine Category | Indian       |
+| Rama        | Date of Birth  | 31/07/1985     |
 
 
 Scenario Outline: Verify presence of vitals fields in the edit patient page

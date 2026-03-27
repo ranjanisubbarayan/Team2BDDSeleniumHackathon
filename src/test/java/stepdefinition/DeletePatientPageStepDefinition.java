@@ -40,7 +40,6 @@ public class DeletePatientPageStepDefinition {
 	@Then("Alert should display {string} {string} in the delete popup section")
 	public void alert_should_display_in_the_delete_popup_section(String elementtype, String Expectedresults) {
 		selectedPatientName = pom.getDeletePatientPopupPage().getFirstPatientName();
-		rowCountBeforeDelete = pom.getDeletePatientPopupPage().getPatientRowCount();
 		String Element = elementtype.trim().toLowerCase();
 		switch (Element) {
 		case "title":
