@@ -95,7 +95,7 @@ public void user_should_see_in_the_edit_patient_page(int count, String element) 
 	Assert.assertEquals(actualCount, count, "Expected " + count + " " + element + " but found " + actualCount);
 }
 
-@Then("User should see the {string} field populated with the {string2} entered during patient creation")
+@Then("User should see the {string} field populated with the {string} entered during patient creation")
 public void user_should_see_the_field_populated_with_the_entered_during_patient_creation(String field_name,String expectedvalue ) {
 	String actualValue = pom.getEditPatientPage().getFieldValue(field_name);
 	logger.info("Validating field '{}' is populated. Actual value {} whereas expected value is {} ", field_name, actualValue , expectedvalue);
@@ -277,12 +277,12 @@ public void user_should_be_redirected_to_my_patient_page() {
 }
 
 @When("User clicks View Previous Test Report after being redirected to the My Patient page for updating the SP {string} and DP {string} value")
-public void user_clicks_view_previous_test_report_after_being_redirected_to_the_my_patient_page_for_updating_the_sp_and_dp_value(String string, String string2) {
+public void user_clicks_view_previous_test_report_after_being_redirected_to_the_my_patient_page_for_updating_the_sp_and_dp_value(String sp, String dp) {
 
 }
 
 @Then("User should see result for the update value  SP {string} and DP {string} value")
-public void user_should_see_result_for_the_update_value_sp_and_dp_value(String string, String string2) {
+public void user_should_see_result_for_the_update_value_sp_and_dp_value(String sp, String dp) {
  
 }
 
