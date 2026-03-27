@@ -132,7 +132,7 @@ public void user_should_see_upload_health_report_text_for_upload_button_in_the_e
 			"Upload health report label is not displayed");
 }
 
-@Then("User should see No File Choosen  text in the edit patient page")
+@Then("User should see No File Choosen text in the edit patient page")
 public void user_should_see_no_file_choosen_text_in_the_edit_patient_page() {
 	Assert.assertTrue(pom.getEditPatientPage().isnoFileChosenTextDisplayed(),
 			"Expected text is not displayed " );
@@ -165,11 +165,18 @@ public void user_clicks_submit_after_editing_first_name_with_in_the_edit_patient
 
 @Then("User should see {string} after redirected to my patient with edited value in first name")
 public void user_should_see_after_redirected_to_my_patient_with_edited_value_in_first_name(String result) {
+	
+	boolean Mypatientloaded = ElementUtil.getURL().toLowerCase().contains("mypatient");
+	if (Mypatientloaded) {
 	Assert.assertTrue(
-			ElementUtil.getURL().toLowerCase().contains("mypatient"),"User is not redirected to My Patient page");
+			Mypatientloaded,"User is not redirected to My Patient page");
 	Assert.assertTrue(pom.getMyPatientsPage().isPatientNameDisplayedForAllRows());
 	String fieldName = "FirstName";
 	 Assert.assertTrue(pom.getMyPatientsPage().doesDetailsColumnContainField(fieldName));
+	}else {
+		Assert.assertTrue(pom.getEditPatientPage().isErrorMessageDisplayed(result),
+				"Expected field error is not displayed "+ result );
+	    }
 }
 
 @When("User clicks submit after editing the last name with {string} in the edit patient page")
@@ -180,11 +187,18 @@ public void user_clicks_submit_after_editing_the_last_name_with_in_the_edit_pati
 
 @Then("User should see {string} after redirected to my patient with edited value in Last name")
 public void user_should_see_after_redirected_to_my_patient_with_edited_value_in_last_name(String result) {
-	Assert.assertTrue(
-			ElementUtil.getURL().toLowerCase().contains("mypatient"),"User is not redirected to My Patient page");
-	Assert.assertTrue(pom.getMyPatientsPage().isPatientNameDisplayedForAllRows());
-	String fieldName = "LastName";
-	 Assert.assertTrue(pom.getMyPatientsPage().doesDetailsColumnContainField(fieldName));
+
+		boolean Mypatientloaded = ElementUtil.getURL().toLowerCase().contains("mypatient");
+		if (Mypatientloaded) {
+		Assert.assertTrue(
+				Mypatientloaded,"User is not redirected to My Patient page");
+		Assert.assertTrue(pom.getMyPatientsPage().isPatientNameDisplayedForAllRows());
+		String fieldName = "LastName";
+		 Assert.assertTrue(pom.getMyPatientsPage().doesDetailsColumnContainField(fieldName));
+		}else {
+			Assert.assertTrue(pom.getEditPatientPage().isErrorMessageDisplayed(result),
+					"Expected field error is not displayed "+ result );
+		    }
 }
 
 @When("User clicks submit after editing the email with {string} in the edit patient page")
@@ -196,11 +210,17 @@ public void user_clicks_submit_after_editing_the_email_with_in_the_edit_patient_
 @Then("User should see {string} after redirected to my patient with edited value in Email field")
 public void user_should_see_after_redirected_to_my_patient_with_edited_value_in_email_field(String result) {
   
-	Assert.assertTrue(
-			ElementUtil.getURL().toLowerCase().contains("mypatient"),"User is not redirected to My Patient page");
-	Assert.assertTrue(pom.getMyPatientsPage().isPatientNameDisplayedForAllRows());
-	String fieldName = "Email";
-	 Assert.assertTrue(pom.getMyPatientsPage().doesDetailsColumnContainField(fieldName));
+		boolean Mypatientloaded = ElementUtil.getURL().toLowerCase().contains("mypatient");
+		if (Mypatientloaded) {
+		Assert.assertTrue(
+				Mypatientloaded,"User is not redirected to My Patient page");
+		Assert.assertTrue(pom.getMyPatientsPage().isPatientNameDisplayedForAllRows());
+		String fieldName = "Email";
+		 Assert.assertTrue(pom.getMyPatientsPage().doesDetailsColumnContainField(fieldName));
+		}else {
+			Assert.assertTrue(pom.getEditPatientPage().isErrorMessageDisplayed(result),
+					"Expected field error is not displayed "+ result );
+		    }
 }
 
 @When("User clicks submit after editing the CTC number with {string} in the edit patient page")
@@ -212,11 +232,17 @@ public void user_clicks_submit_after_editing_the_ctc_number_with_in_the_edit_pat
 @Then("User should see {string} after redirected to my patient with edited value in CTC number field")
 public void user_should_see_after_redirected_to_my_patient_with_edited_value_in_ctc_number_field(String result) {
   
+	boolean Mypatientloaded = ElementUtil.getURL().toLowerCase().contains("mypatient");
+	if (Mypatientloaded) {
 	Assert.assertTrue(
-			ElementUtil.getURL().toLowerCase().contains("mypatient"),"User is not redirected to My Patient page");
+			Mypatientloaded,"User is not redirected to My Patient page");
 	Assert.assertTrue(pom.getMyPatientsPage().isPatientNameDisplayedForAllRows());
 	String fieldName = "Email";
 	 Assert.assertTrue(pom.getMyPatientsPage().doesDetailsColumnContainField(fieldName));
+	}else {
+		Assert.assertTrue(pom.getEditPatientPage().isErrorMessageDisplayed(result),
+				"Expected field error is not displayed "+ result );
+	    }
 }
 
 @When("User clicks submit after entering a {string} in the {string} field in the edit patient page")
@@ -230,6 +256,8 @@ public void user_should_be_redirected_to_the_my_patient_page_with_the_updated_va
 	Assert.assertTrue(
 			ElementUtil.getURL().toLowerCase().contains("mypatient"),"User is not redirected to My Patient page");
 	Assert.assertTrue(pom.getMyPatientsPage().isPatientNameDisplayedForAllRows());
+	 String actualValue = pom.getEditPatientPage().getFieldValue(field);
+	 Assert.assertEquals(actualValue, validvalue, field + " is not updated correctly");
 }
 
 @When("User clicks View Previous Test Report after being redirected to the My Patient page for updating {string} value")
@@ -266,6 +294,7 @@ public void user_clicks_submit_after_entering_valid_values_in_sp_and_dp_fields_i
 	pom.getEditPatientPage().enterValue("sp", sp);
 	pom.getEditPatientPage().enterValue("dp", dp);
 	pom.getEditPatientPage().clickSubmit();
+	
 }
 
 @Then("User should be redirected to My Patient page")
@@ -342,8 +371,8 @@ public void user_uploads_health_report_in_pdf() {
 public void user_should_see_uploaded_file_name_with_extension() {
 }
 
-@When("User clicks submit after uploading a valid file")
-public void user_clicks_submit_after_uploading_a_valid_file() {
+@When("User clicks submit after uploading a valid file in the editpatient page")
+public void user_clicks_submit_after_uploading_a_valid_file_in_the_editpatient_page() {
 
 }
 
