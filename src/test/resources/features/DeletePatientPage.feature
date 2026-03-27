@@ -7,7 +7,7 @@ Feature: Delete Patient Page Pop Up Validation
 Rule: Delete pop up info validation
 
 Background: 
-Given User is in my patient page after logged in
+Given User is in my patient page for deleting a patient after logged in
 
 
 Scenario Outline: Verify Delete patient popup elements

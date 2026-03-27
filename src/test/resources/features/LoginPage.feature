@@ -22,11 +22,10 @@ Then User should see the labels with text in Login page
  	| username	|
  	| password	|
 
-Scenario:  Verify username input field presence 
-Then Username input field should be visible 
-
-Scenario: Verify Password input field presence 
-Then Password input field should be visible 
+Scenario:  Verify input field presence 
+Then The input fields should be visible
+    | username |
+    | password |
 
 Scenario: Verify Login button presence 
 Then Login button should be visible

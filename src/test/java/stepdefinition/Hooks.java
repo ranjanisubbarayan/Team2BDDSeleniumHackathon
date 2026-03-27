@@ -29,7 +29,7 @@ public class Hooks {
 
 		Properties prop = ConfigReader.initializeProperties();
 		logger.debug("Loaded configuration properties");
-		
+
 		ExcelReader.readDataFromExcel(prop.getProperty("loginsheetName"));
 		logger.info("Excel test data loaded");
 
@@ -43,7 +43,7 @@ public class Hooks {
 		pom = new PageObjectManager();
 		logger.info("PageObjectManager initialized");
 	}
-	
+
 	@Before(value = "@Login", order = 1)
 	public void performLogin() throws IOException {
 		pom.getDashboardPage().clickLoginButton();
@@ -52,19 +52,18 @@ public class Hooks {
 		pom.getLoginPage().login("Submits the login form", "valid_login");
 		logger.info("Performed login with valid credentials");
 	}
-	
-	@Before(value = "@MyPatient", order =2)
+
+	@Before(value = "@MyPatient", order = 2)
 	public void mypatientpage() {
-		
+
 		if (pom.getDeletePatientPopupPage().isPatientTableDisplayed()) {
-	        logger.info("User already on My Patients page");
-	        return;
-	    }else {
-	    	 pom.getDashboardPage().clickNavigationLink("My Patients");
-	    	 logger.info("Successfully navigated to My Patients page");
-	    }
+			logger.info("User already on My Patients page");
+			return;
+		} else {
+			pom.getDashboardPage().clickNavigationLink("My Patients");
+			logger.info("Successfully navigated to My Patients page");
+		}
 	}
-	
 
 	@AfterStep
 	public void screenShot(Scenario scenario) {
