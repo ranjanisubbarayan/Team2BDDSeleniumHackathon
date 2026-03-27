@@ -11,6 +11,8 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pages.PageObjectManager;
+import utils.ExcelReader;
+import utils.TestContext;
 
 public class AddPatientStepDefinition {
 
@@ -109,9 +111,9 @@ public class AddPatientStepDefinition {
 	        Assert.assertTrue(isVisible, "Optional field not visible: " + fieldName);
 	    }
 	    
-	    @When("User clicks on Submit without entering {string}")
-	    public void user_clicks_submit_without_entering_field(String field) {
-	       pom.getAddPatient().clickSubmitButton();
+	    @When("User clicks on Submit without entering mandatory {string}")
+	    public void user_clicks_submit_without_entering_field(String invalidData) {
+	    	pom.getAddPatient().clickSubmitButton();
 	    }
 
 	    @Then("User should see error message {string}")
@@ -122,26 +124,44 @@ public class AddPatientStepDefinition {
 	    }
 	    
 	    
-	    @When("User clicks Submit with {string}")
-	    public void user_clicks_submit_with(String field ) {
-	       
+	    @When("User enters and click Submit with {string}")
+	    public void user_enters_and_click_submit_with(String invalidData ) {
+	    	 TestContext.testData = ExcelReader.getTestData(invalidData);
+             pom.getAddPatient().fillForm(TestContext.testData);
+             pom.getAddPatient().clickSubmitButton();
 	    }
 
 	    @Then("User should see validation message {string}")
-	    public void user_should_see_validation_message(String message) {
+	    public void user_should_see_validation_message(String expectedMessage) {
+	    	String actualMessage = pom.getAddPatient().getErrorMessageFromUI(expectedMessage);
 	        
+	    	Assert.assertEquals(actualMessage, expectedMessage, 
+	            "Validation message mismatch for scenario: " + TestContext.testData.get("scenarioType "));
 	    }
+	    
 	    
 	    @When("User fills incomplete add patient form")
 	    public void user_fills_incomplete_add_patient_form() {
 	       
 	    }
-
-	    @When("User enters valid data in all mandatory fields")
-	    public void user_enters_valid_data_in_all_mandatory_fields() {
-	        
+	    
+	    @Then("User should see {string} button is disabled")
+	    public void user_should_see_button_is_disabled(String btnName) {
+	    	 pom.getAddPatient().isButtonEnabled(btnName);
 	    }
 
+	    @When("User enters {string} in all fields")
+	    public void user_enters_valid_data_in_all(String validData) {
+	        TestContext.testData = ExcelReader.getTestData(validData);
+            pom.getAddPatient().fillForm(TestContext.testData);
+           	       
+	    }
+	    
+	    @Then("User should see {string} button is enabled")
+	    public void user_should_see_button_is_enabled(String btnName) {
+	    	 pom.getAddPatient().isButtonEnabled(btnName);
+	    }
+	    
 	    @When("User clicks on {string} button")
 	    public void user_clicks_on_button(String buttonName) {
 	        
@@ -151,6 +171,124 @@ public class AddPatientStepDefinition {
 	    public void add_patient_dialog_should_be_closed() {
 	      
 	    }
+	    
+	    @When("User clicks on {string} dropdown to select {string}")
+	    public void user_clicks_on_dropdown_to_select_and(String dropdownName) {
+	        pom.getAddPatient().clickDropdown(dropdownName);
+	    }
+
+	    @When("User clicks on {string} dropdown")
+	    public void user_clicks_on_dropdown(String dropDownName) {
+	    	pom.getAddPatient().clickDropdown(dropDownName);
+	    }
+	    
+	    @Then("User should see {int} options in the dropdown")
+	    public void user_should_see_count_options_in_dropdown(int expectedCount) {
+	       
+	    }
+
+	    @When("User clicks on the Allergy dropdown")
+	    public void user_clicks_on_allergy_dropdown() {
+	        pom.getAddPatient().clickDropdown("Allergies");
+	    }
+
+	    @Then("the Allergy dropdown should contain the following values:")
+	    public void allergy_dropdown_should_contain_values(List<String> expected) {
+	    	List<String> actual = pom.getAddPatient().getDropdownOptions("allergies");
+	        Assert.assertTrue(actual.containsAll(expected), "Allergy dropdown values mismatch!");
+	    }	  
+
+	    @When("User clicks on the Food Preference dropdown")
+	    public void user_clicks_on_food_preference_dropdown() {
+	        pom.getAddPatient().clickDropdown("Food Preference");
+	    }
+
+	    @Then("the Food Preference dropdown should contain the following values:")
+	    public void food_preference_dropdown_should_contain_values(List<String> expected) {
+	    	 List<String> actual = pom.getAddPatient().getDropdownOptions("food preference");
+	    	    Assert.assertTrue(actual.containsAll(expected), "Food Preference dropdown values mismatch!");
+	    	}
+	    
+	    @When("User clicks on the cuisine dropdown")
+	    public void user_clicks_on_cuisine_dropdown(List<String> expected) {
+	        pom.getAddPatient().clickDropdown("cuisine");
+	    }
+	   
+	    @Then("the cuisine dropdown should contain the following values:")
+	    public void verifyCuisineDropdownValues(List<String> expected) {
+	    List<String> actual = pom.getAddPatient().getDropdownOptions("cuisine category");
+	    Assert.assertTrue(actual.containsAll(expected), "Cuisine dropdown values mismatch!");
+	}
+	   
+	    @When("User clicks on {string} dropdown and selects {string}")
+	    public void user_clicks_on_dropdown_and_select(String dropdown, String value) {
+	        pom.getAddPatient().selectDropdownValue(dropdown,value);
+	    }
+
+	    @Then("{string} should be selected in the {string} field")
+	    public void value_should_be_selected_in_field(String value, String dropdown) {
+	        List<String> selectedValue = pom.getAddPatient().getDropdownOptions(dropdown);
+	        Assert.assertTrue(selectedValue.contains(value),
+	                value + " is not present in " + dropdown);
+	    }
+
+	    @When ("User select {string} and {string} from {string} dropdown")
+	    public void user_selecet_and_from_dropdown(String value1, String value2, String dropdown) {
+	    	pom.getAddPatient().selectDropdownValue(dropdown, value1);
+	    	pom.getAddPatient().selectDropdownValue(dropdown, value2);
+	    }
+	    
+	    
+	    
+	    @Then("{string} and {string} should both be selected in the {string} field")
+	    public void multiple_values_selected_in_field(String value1, String value2, String dropdown) {
+	    	List<String> selectedOptions = pom.getAddPatient().getDropdownOptions(dropdown);
+	        Assert.assertTrue(selectedOptions.contains(value1));
+	        Assert.assertTrue(selectedOptions.contains(value2));
+	    }
+
+	 
+	    @Then("User should see file upload option")
+	    public void user_should_see_file_upload_option() {
+	    	Assert.assertTrue(pom.getAddPatient().isfileUploadVisible(),
+	    	        "Upload file field is not visible!");
+	    }
+
+	    @When("User uploads a valid file")
+	    public void user_uploads_a_valid_file() {
+	        
+	    }
+
+	    @Then("File should be uploaded successfully")
+	    public void file_should_be_uploaded_successfully() {
+	      
+	               
+	    }
+
+	    @When("User uploads an invalid file")
+	    public void user_uploads_an_invalid_file() {
+	        
+	    }
+
+	    @Then("User should see file upload error message")
+	    public void user_should_see_file_upload_error_message() {
+	       
+	    }
+
+	   
+//
+//	    @When("User clicks {string} after entering valid data in all mandatory fields")
+//	    public void user_clicks_submit_after_entering_valid_data(String button) {
+//	        pom.getAddPatient().fillAllMandatoryFields();
+//	        pom.getAddPatient().clickSubmit(button);
+//	    }
+//
+//	    @Then("User should see Patient successfully created - toast message")
+//	    public void user_should_see_patient_created_toast() {
+//	        Assert.assertTrue(
+//	                pom.getAddPatient().isSuccessToastDisplayed(),
+//	                "Success toast message is not displayed");
+//	    }
 
 	}
 	

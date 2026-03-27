@@ -31,6 +31,7 @@ public class Hooks {
 		logger.debug("Loaded configuration properties");
 		
 		ExcelReader.readDataFromExcel(prop.getProperty("loginsheetName"));
+		ExcelReader.readDataFromExcel(prop.getProperty("addPatientData"));
 		logger.info("Excel test data loaded");
 
 		String browser = System.getProperty("browserName", prop.getProperty("browserName"));
