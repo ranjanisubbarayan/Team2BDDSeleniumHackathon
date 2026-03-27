@@ -68,9 +68,6 @@ public class EditPatientPage {
 	@FindBy (xpath = ("//input[@type = 'file']"))
 	private List<WebElement> fileUploadInput;	
 
-	@FindBy(xpath = "//*[contains(text(),'Upload Health Report')]")
-	private WebElement uploadHealthReportLabel;
-
 	@FindBy(xpath = "//*[contains(text(),'No file chosen')]")
 	private WebElement noFileChosenText;
 	
@@ -79,9 +76,6 @@ public class EditPatientPage {
 	
 	@FindBy(xpath = "//button[normalize-space()='Close']")
 	private WebElement closeButton;
-	
-	@FindBy(xpath = "//*[contains(text(),'required')]")
-	private List<WebElement> errorMessages;
 	
 	@FindBy(xpath = "//input")
 	private List<WebElement> inputFields;
