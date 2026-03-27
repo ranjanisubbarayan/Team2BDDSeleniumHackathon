@@ -18,7 +18,7 @@ public class DeletePatientPageStepDefinition {
 	}
 	
 	private String selectedPatientName;
-	private int rowCountBeforeDelete;
+	int rowCountBeforeDelete;
 	
 
 	@When("User clicks the Delete icon for a {string} in the patient table")
