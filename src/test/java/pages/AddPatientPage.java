@@ -1,6 +1,9 @@
 package pages;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -53,10 +56,19 @@ public class AddPatientPage {
 	private WebElement temp;
 	
 	@FindBy (id =("SP"))
-	private WebElement sP;
+	private WebElement sp;
 	
 	@FindBy (id =("DP"))
-	private WebElement dP;	
+	private WebElement dp;	
+	
+	@FindBy(id = "allergies")
+	private WebElement allergiesDropdown;
+
+	@FindBy(id = "foodPreference")
+	private WebElement foodDropdown;
+
+	@FindBy(id = "cuisine")
+	private WebElement cuisineDropdown;
 	
 	@FindBy (xpath =("//select"))
 	private List<WebElement> dropDownCount ;
@@ -78,6 +90,9 @@ public class AddPatientPage {
 	
 	@FindBy (xpath = ("//input[@type = 'file']"))
 	private List<WebElement> uploadFile;
+	
+	@FindBy (xpath = ("//input[@type = 'file']"))
+	private WebElement fileUpload;
 	
 	@FindBy (xpath = ("//button[text() = 'Submit']"))
 	private WebElement submit;
@@ -109,6 +124,10 @@ public class AddPatientPage {
 	
 	public void clickCloseButton() {
 		close.click();
+	}
+	
+	public boolean isfileUploadVisible() {
+		return fileUpload.isDisplayed();
 	}
 	
 	public boolean isButtonVisible(String btnName) {
@@ -165,8 +184,8 @@ public class AddPatientPage {
 		case "Weight": return weight.isDisplayed();
 		case "Height": return height.isDisplayed();
 		case "Temperature": return temp.isDisplayed();
-		case "SP": return sP.isDisplayed();
-		case "DP": return dP.isDisplayed();
+		case "SP": return sp.isDisplayed();
+		case "DP": return dp.isDisplayed();
 		default:
            System.out.println("Unknown optional field: " + fieldName);			
 		return false;
@@ -189,12 +208,104 @@ public class AddPatientPage {
 		    }
 		
 	}
-	
-	
-	
-	
-	
-	
-	
 		
+		public void fillForm(Map<String, String> testData) {
+
+		    // Helper to enter text if value exists
+		    enterText(firstName, testData.get("first_name"));
+		    enterText(lastName,  testData.get("last_name"));
+		    enterText(email,      testData.get("email"));
+		    enterText(contactNo,  testData.get("contact"));
+		    enterText(DOB,        testData.get("dob"));
+		    enterText(weight,     testData.get("weight"));
+		    enterText(height,     testData.get("height"));
+		    enterText(temp,       testData.get("temp"));
+		    enterText(sp,         testData.get("sp"));
+		    enterText(dp,         testData.get("dp"));
+		    selectDropdown(allergiesOptions, testData.get("allergy"));
+		    selectDropdown(foodOptions,      testData.get("food_preference"));
+		    selectDropdown(cuisineOptions,   testData.get("cuisine"));
+		}
+		private void enterText(WebElement element, String value) {
+		    if (value != null && !value.isEmpty()) {
+		        element.clear();
+		        element.sendKeys(value);
+		    }
+		}
+
+	public void selectDropdown(List<WebElement> options, String value) {
+		    if (value != null && !value.isEmpty()) {
+		        for (WebElement opt : options) {
+		            if (opt.getText().equalsIgnoreCase(value)) {
+		                opt.click();
+		                break; // Stop after first match
+		            }
+		        }
+		    }
+		}
+		
+	public String getErrorMessageFromUI(String expectedMessage) {
+	    // Example: find the element that contains the error text
+	    return driver.findElement(By.xpath("//div[contains(text(),'" + expectedMessage + "')]")).getText();
+	}
+	
+	public void clickDropdown(String dropdownName) {
+		switch (dropdownName.toLowerCase()) {
+	    case "allergies": allergiesDropdown.click(); 
+	        break;
+	    case "food preference": foodDropdown.click(); 
+	        break;
+	    case "cuisine category": cuisineDropdown.click(); 
+	        break;
+	    default: 
+            logger.info("Dropdown not found: " + dropdownName);
+	    
+	}
+			}
+	public int getDropdownOptionsCount(String dropdownName) {
+	    switch (dropdownName.toLowerCase()) {
+	        case "allergies": return allergiesOptions.size();
+	        case "food preference": return foodOptions.size();
+	        case "cuisine category": return cuisineOptions.size();
+	        default: 
+	        	throw new IllegalArgumentException("Invalid dropdown: " + dropdownName);
+	    }
+	}
+	
+	public List<String> getDropdownOptions(String dropdownName) {
+	    List<WebElement> options;
+	    switch (dropdownName.toLowerCase()) {
+	        case "allergies": options = allergiesOptions;
+	        break;
+	        case "food preference": options = foodOptions;
+	        break;
+	        case "cuisine category": options = cuisineOptions;
+	        break;
+	        default:  logger.info("Dropdown not found: " + dropdownName);
+            return new ArrayList<>();
+	    }
+	    
+	    List<String> optionTexts = new ArrayList<>();
+	    for (WebElement opt : options) {
+	        optionTexts.add(opt.getText().trim());
+	    }
+	    return optionTexts;
+	}
+	
+	public void selectDropdownValue(String dropdown, String value) {
+
+	     List<WebElement> options;
+	    switch (dropdown.toLowerCase()) {
+	        case "allergies": options = allergiesOptions;
+	            break;
+	        case "food preference": options = foodOptions;
+	            break;
+	        case "cuisine category": options = cuisineOptions;
+	            break;
+	        default:
+	            throw new IllegalArgumentException("Invalid dropdown: " + dropdown);
+	    }
+	    clickDropdown(dropdown);
+	    selectDropdown(options, value);
+	}	
 }
