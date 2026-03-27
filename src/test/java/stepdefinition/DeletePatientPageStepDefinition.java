@@ -21,10 +21,6 @@ public class DeletePatientPageStepDefinition {
 	private String selectedPatientName;
 	private int rowCountBeforeDelete;
 	
-	@Given("User is in my patient page after logged in")
-	public void user_is_in_my_patient_page_after_logged_in() {
-		logger.info("User Successfully logged in and navigated to My Patients page");
-	}
 
 	@When("User clicks the Delete icon for a {string} in the patient table")
 	public void user_clicks_the_delete_icon_for_a_in_the_patient_table(String patientname) {

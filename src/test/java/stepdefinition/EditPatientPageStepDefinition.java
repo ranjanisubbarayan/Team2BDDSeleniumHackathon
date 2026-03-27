@@ -96,11 +96,11 @@ public void user_should_see_in_the_edit_patient_page(int count, String element) 
 }
 
 @Then("User should see the {string} field populated with the {string} entered during patient creation")
-public void user_should_see_the_field_populated_with_the_entered_during_patient_creation(String field_name,String expectedvalue ) {
+public void user_should_see_the_field_populated_with_the_entered_during_patient_creation(String field_name,String expected_value ) {
 	String actualValue = pom.getEditPatientPage().getFieldValue(field_name);
-	logger.info("Validating field '{}' is populated. Actual value {} whereas expected value is {} ", field_name, actualValue , expectedvalue);
+	logger.info("Validating field '{}' is populated. Actual value {} whereas expected value is {} ", field_name, actualValue , expected_value);
 	Assert.assertNotNull(actualValue, "Field value is null for: " + field_name);
-    Assert.assertEquals(actualValue.trim(), expectedvalue.trim(),"Mismatch in field: " + field_name);
+    Assert.assertEquals(actualValue.trim(), expected_value.trim(),"Mismatch in field: " + field_name);
 }
 
 
