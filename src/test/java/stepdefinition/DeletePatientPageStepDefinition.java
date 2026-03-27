@@ -3,7 +3,6 @@ package stepdefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pages.PageObjectManager;
@@ -24,7 +23,7 @@ public class DeletePatientPageStepDefinition {
 
 	@When("User clicks the Delete icon for a {string} in the patient table")
 	public void user_clicks_the_delete_icon_for_a_in_the_patient_table(String patientname) {
-		
+	
 	    if (patientname != null && !patientname.trim().isEmpty()) {
 	    	pom.getDeletePatientPopupPage().getDeleteIconByPatientName(patientname);
 	    } else {
@@ -36,7 +35,6 @@ public class DeletePatientPageStepDefinition {
 	@Then("Alert should display {string} {string} in the delete popup section")
 	public void alert_should_display_in_the_delete_popup_section(String elementtype, String Expectedresults) {
 		selectedPatientName = pom.getDeletePatientPopupPage().getFirstPatientName();
-		rowCountBeforeDelete = pom.getDeletePatientPopupPage().getPatientRowCount();
 		String Element = elementtype.trim().toLowerCase();
 		switch (Element) {
 		case "title":
@@ -94,7 +92,7 @@ public class DeletePatientPageStepDefinition {
 
 	@Then("User should {string} in the dietician application")
 	public void user_should_in_the_dietician_application(String expectedresult) {
-	    
+		rowCountBeforeDelete = pom.getDeletePatientPopupPage().getPatientRowCount();
 		switch (expectedresult.trim().toLowerCase()) {
 		case "navigated back to main page":
 			String currentUrl = ElementUtil.getURL();
