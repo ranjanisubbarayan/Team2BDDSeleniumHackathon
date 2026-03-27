@@ -1,6 +1,6 @@
 package stepdefinition;
 
-import static org.testng.Assert.assertTrue;
+
 
 import java.util.List;
 
@@ -13,16 +13,14 @@ import io.cucumber.java.en.When;
 import pages.PageObjectManager;
 import utils.ElementUtil;
 
-public class MyPatientsPageStepDefinition {
+public class MyPatientsPageStepDefinition
+{
 
 	private final PageObjectManager pom;
 	private static final Logger logger = LoggerFactory.getLogger(MyPatientsPageStepDefinition.class);
-	 int  originalRowCount;
-	 List<String> beforePaginationIds;
-	 String searchText;
-	 String name;
-	 String id;
-	public MyPatientsPageStepDefinition(PageObjectManager pom) {
+	 
+	public MyPatientsPageStepDefinition(PageObjectManager pom)
+	{
 		this.pom = pom;
 	}
 
@@ -145,8 +143,7 @@ public class MyPatientsPageStepDefinition {
 
 		@Given("User is in My Patients page")
 		public void user_is_in_my_patients_page() {
-		    // Write code here that turns the phrase above into concrete actions
-		    throw new io.cucumber.java.PendingException();
+			logger.info("User Successfully logged in and navigated to My Patients page");
 		}
 
 		@When("User clicks up arrow in Patient Id column")
@@ -199,23 +196,7 @@ public class MyPatientsPageStepDefinition {
 			  boolean sorted = pom.getMyPatientsPage().isSortedDescendingName(names);
 			  Assert.assertTrue(sorted, "Patient names are not sorted in descending order");
 		}
-		@When("User searches using patient name")
-		public void user_searches_using_patient_name()
-		{
-			pom.getMyPatientsPage().searchByPatientName(name);
-		}
-
-		@Then("Matching patient details should be displayed")
-		public void matching_patient_details_should_be_displayed() 
-		{
-			 logger.info("Validating search results for: " + searchText);
-             pom.getMyPatientsPage().isMatchingPatientDetailsDisplayed(searchText);
-		}
-		@When("User searched using patient id")
-		public void user_searched_using_patient_id()
-		{
-			 pom.getMyPatientsPage().searchByPatientId(id);
-		}
+		
 		@When("User clicks View Previous Test Reports under action column")
 		public void user_clicks_view_previous_test_reports_under_action_column() {
 		   pom.getMyPatientsPage().clickViewPreviousTestReports();
@@ -226,11 +207,12 @@ public class MyPatientsPageStepDefinition {
 			 Assert.assertEquals(expectedReportHeader, pom.getMyPatientsPage().getReportPageHeader());
 		}
 		
-		@Given("User entered the text in search box in My Patients page")
-		public void user_entered_the_text_in_search_box_in_my_patients_page()
-		{
-			 pom.getMyPatientsPage().enterSearchText(name);
+		@Given("User entered {string} in search box in My Patients page")
+		public void user_entered_text_in_search_box(String searchText) {
+			pom.getMyPatientsPage().getOriginalRowCount();
+		    pom.getMyPatientsPage().enterSearchText(searchText);
 		}
+
 
 		   
 		@When("User clears the search text")
@@ -242,29 +224,31 @@ public class MyPatientsPageStepDefinition {
 		public void all_patient_records_should_be_displayed_again() 
 		{
 			 int currentRowCount = pom.getMyPatientsPage().getDisplayedRowCount();
+			 int originalRowCount = pom.getMyPatientsPage().getOriginalRowCount();
+			 
              Assert.assertEquals(currentRowCount, originalRowCount);
 			            
 			}
 		
 		@Given("User is in My Patients page with multiple pages of patient record")
 		public void user_is_in_my_patients_page_with_multiple_pages_of_patient_record() {
-		   pom.getMyPatientsPage().clickMyPatientsButton();
+			 logger.info("User Successfully logged in and navigated to My Patients page");
+			 
 		}
      
 		@When("User clicks the next page arrow \\(>)")
 		public void user_clicks_the_next_page_arrow() {
-		beforePaginationIds = pom.getMyPatientsPage().getDisplayedPatientIds();
-
-		   pom.getMyPatientsPage().clickNextPage();
+	         pom.getMyPatientsPage().clickNextPage();
 		}
 
 		@Then("Next set of  patient records should be displayed")
 		public void next_set_of_patient_records_should_be_displayed() {
-			List<String>afterClickPaginationIds = pom.getMyPatientsPage().getDisplayedPatientIds();
-        Assert.assertNotEquals(beforePaginationIds, afterClickPaginationIds);
+			
+			    int page = pom.getMyPatientsPage().getCurrentPageNumber();
+			    Assert.assertTrue(page > 1, "Page did not move to the next page");
+			}
+
 		   
-		}
-		
 		@Given("User is in later page of My Patients page")
 		public void user_is_in_later_page_of_my_patients_page() {
 		    pom.getMyPatientsPage().clickNextPage();
@@ -272,18 +256,16 @@ public class MyPatientsPageStepDefinition {
 
 		@When("User clicks the previous page arrow \\(<)")
 		public void user_clicks_the_previous_page_arrow() {
-			beforePaginationIds = pom.getMyPatientsPage().getDisplayedPatientIds();
-
-			   pom.getMyPatientsPage().clickPreviousPage();
+			pom.getMyPatientsPage().clickPreviousPage();
 		}
-
 		@Then("Previous set of patient records should be displayed")
 		public void previous_set_of_patient_records_should_be_displayed() {
-			List<String>afterClickPaginationIds = pom.getMyPatientsPage().getDisplayedPatientIds();
-	        Assert.assertNotEquals(beforePaginationIds, afterClickPaginationIds);
+		    int page = pom.getMyPatientsPage().getCurrentPageNumber();
+		    Assert.assertEquals(page, 1, "Page did not move to the previous page");
+		}
+
+
 			   
-			}
-		
 		@Given("User is in any page except first page of My Patients page")
 		public void user_is_in_any_page_except_first_page_of_my_patients_page() {
 			pom.getMyPatientsPage().clickNextPage();
@@ -292,18 +274,19 @@ public class MyPatientsPageStepDefinition {
 
 		@When("User clicks the first page arrow \\(<<)")
 		public void user_clicks_the_first_page_arrow() {
-			 beforePaginationIds = pom.getMyPatientsPage().getDisplayedPatientIds();
+			
 		        pom.getMyPatientsPage().clickFirstPage();
 
 		}
 
 		@Then("First page of patient records should be displayed")
 		public void first_page_of_patient_records_should_be_displayed() {
-			List<String>afterClickPaginationIds = pom.getMyPatientsPage().getDisplayedPatientIds();
-	        Assert.assertNotEquals(beforePaginationIds, afterClickPaginationIds);
+			 int page = pom.getMyPatientsPage().getCurrentPageNumber();
+			    Assert.assertEquals(page, 1, "Page did not move to the previous page");
+			
+			}
+
 		    
-		}
-		
 		@Given("User is in any page except last page of My Patients page")
 		public void user_is_in_any_page_except_last_page_of_my_patients_page() {
 			pom.getMyPatientsPage().clickFirstPage();
@@ -312,18 +295,18 @@ public class MyPatientsPageStepDefinition {
 
 		@When("User clicks the last page arrow \\(>>)")
 		public void user_clicks_the_last_page_arrow() {
-			 beforePaginationIds = pom.getMyPatientsPage().getDisplayedPatientIds();
-		        pom.getMyPatientsPage().clickLastPage();
+			pom.getMyPatientsPage().clickLastPage();
 		    }
 
 		
 
 		@Then("Last page of patient records should be displayed")
 		public void last_page_of_patient_records_should_be_displayed() {
-			List<String>afterClickPaginationIds = pom.getMyPatientsPage().getDisplayedPatientIds();
-	        Assert.assertNotEquals(beforePaginationIds, afterClickPaginationIds);
-		    
-		}
+			 
+			 Assert.assertFalse(pom.getMyPatientsPage().isNextPageArrowEnabled(),
+				        "Next page arrow is still enabled — not on last page");
+
+				    }
 		@When("User navigates to the first page of patient record")
 		public void user_navigates_to_the_first_page_of_patient_record() {
 		    pom.getMyPatientsPage().clickFirstPage();
@@ -434,7 +417,7 @@ public class MyPatientsPageStepDefinition {
 
 		@Given("User is in any page of My Patients page")
 		public void user_is_in_any_page_of_my_patients_page() {
-			// pom.getDashboardPage().clickMyPatientsButton();
+		 logger.info("User Successfully logged in and navigated to My Patients page");
 
 		}
 
@@ -458,13 +441,20 @@ public class MyPatientsPageStepDefinition {
 			    Assert.assertTrue(end <= total, "End count should be <= total count" );
 			    Assert.assertTrue(total > 0, "Total count should be > 0");
 			}
-
+		@When("User searches using {string}")
+		public void user_searches_using(String searchText) {
+		    pom.getMyPatientsPage().enterSearchText(searchText);
 		}
 
-		
+	   @Then("Matching patient details should be displayed for {string}")
+       public void matching_patient_details_should_be_displayed_for(String searchText) {
+      
+       boolean present = pom.getMyPatientsPage().isMatchingPatientDetailsDisplayed(searchText);
+       Assert.assertTrue(present, "Expected patient not found");
+  
+	   }
 
-
-		
+}		
 
 
 

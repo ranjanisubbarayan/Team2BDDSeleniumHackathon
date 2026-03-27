@@ -16,13 +16,15 @@ import DriverManager.DriverFactory;
 import utils.WaitUtils;
 
 
-public class MyPatientsPage {
+public class MyPatientsPage 
+{
 
 	private WebDriver driver;
 	 private final WaitUtils waitUtils;
 	private static final Logger logger = LoggerFactory.getLogger(MyPatientsPage.class);
 
-	public MyPatientsPage() {
+	public MyPatientsPage() 
+	{
 		this.driver = DriverFactory.getDriver();
 		 this.waitUtils = new WaitUtils();
 		PageFactory.initElements(driver, this);
@@ -74,9 +76,12 @@ public class MyPatientsPage {
 	 @FindBy(xpath = "//a[@aria-label='Last']")
 	    private WebElement lastPageArrow;
      @FindBy(xpath = "//a[@aria-label='Next']")
-            private WebElement nextPageArrow;
+          private WebElement nextPageArrow;
      @FindBy(xpath = "//div[contains(@class,'pagination-info')]")
-     private WebElement paginationInfo;
+          private WebElement paginationInfo;
+     @FindBy(xpath = "//span[@class='current-page']")
+           private WebElement currentPageNumber;
+
 
 
 	public void clickMyPatientsButton()
@@ -89,48 +94,58 @@ public class MyPatientsPage {
 		logger.info("Returning MyPatients Title ");
 		return WaitUtils.waitForVisibility(driver, pageHeader, 5).getText().trim();
 	}
-	 public boolean isSearchBarDisplayed() {
+	 public boolean isSearchBarDisplayed() 
+	 {
 		 logger.info("Checking Search bar display status");
 		 return WaitUtils.isVisible(driver, searchBar, 5);
 	    }
-	 public boolean isSearchIconDisplayed() {
+	 public boolean isSearchIconDisplayed()
+	 {
 		 logger.info("Checking Search Icon display status");
 		 return WaitUtils.isVisible(driver, searchIcon, 5);
 	    }
-	 public boolean isPlaceholderDisplayed(String expectedText) {
+	 public boolean isPlaceholderDisplayed(String expectedText) 
+	 {
 	        String actualText = searchPlaceHolder.getAttribute("placeholder");
 	        logger.info("Checking Search placeholder display status");
 	        return actualText.equals(expectedText);
 	 }
-	 //@FindBy can't able to use for dynamic xpath variable
-	 public WebElement getHeaderElement(String header) {
+	
+	 public WebElement getHeaderElement(String header)
+	 {
 		  logger.info("Getting header elements");
 	        return driver.findElement(By.xpath("//th[normalize-space()='" + header + "']"));
 	    }
 
-	    public boolean isHeaderDisplayed(String header) {
+	    public boolean isHeaderDisplayed(String header) 
+	    {
 	    	logger.info("Checking header element display status" );
 	    	return getHeaderElement(header).isDisplayed();
 	    }
 
-	    public boolean isUpArrowPatientIdDisplayed() {
+	    public boolean isUpArrowPatientIdDisplayed()
+	    {
 	    	 logger.info("Checking Up arrow patient Id display status");
 	    	return WaitUtils.isVisible(driver, upArrowPatientId, 5);
 	    }
-	    public boolean isDownArrowPatientIdDisplayed() {
+	    public boolean isDownArrowPatientIdDisplayed()
+	    {
 	    	 logger.info("Checking Down arrow patient Id display status");
 	    	return WaitUtils.isVisible(driver, downArrowPatientId, 5);
 	    }
 
-	    public boolean isUpArrowNameDisplayed() {
+	    public boolean isUpArrowNameDisplayed()
+	    {
 	    	 logger.info("Checking Up arrow patient name display status");
 	    	return WaitUtils.isVisible(driver, upArrowName, 5);
 	    }
-	    public boolean isDownArrowNameDisplayed() {
+	    public boolean isDownArrowNameDisplayed() 
+	    {
 	    	 logger.info("Checking Down arrow patient name display status");
 	    	return WaitUtils.isVisible(driver, downArrowName, 5);
 	    }
-	    public boolean doesColumnHaveValues(String column) {
+	    public boolean doesColumnHaveValues(String column)
+	    {
 
 	        logger.info("Checking the column index based on header text");
 	        String columnIndexXpath = "//th[normalize-space()='" + column + "']/preceding-sibling::th";
@@ -149,7 +164,8 @@ public class MyPatientsPage {
 	        }
 	        return true;
 	    }
-	    public boolean isPatientIdDisplayedForAllRows() {
+	    public boolean isPatientIdDisplayedForAllRows()
+	    {
 	    	logger.info("Checking Patient Id displayed for all rows");
             for (WebElement patientId : patientIds) {
 	            if (patientId.getText().trim().isEmpty()) {
@@ -158,7 +174,8 @@ public class MyPatientsPage {
 	        }
 	        return true;
 	    }
-	    public boolean isPatientNameDisplayedForAllRows() {
+	    public boolean isPatientNameDisplayedForAllRows()
+	    {
 	    	logger.info("Checking Patient name displayed for all rows");
 	        for (WebElement patientName : patientNames) {
 	            if (patientName.getText().trim().isEmpty()) {
@@ -167,7 +184,8 @@ public class MyPatientsPage {
 	        }
 	        return true;
 	    }
-	    public boolean doesDetailsColumnContainField(String fieldName) {
+	    public boolean doesDetailsColumnContainField(String fieldName) 
+	    {
             logger.info("Checking the Details column have field");
 	        for (WebElement cell : details) {
 
@@ -203,7 +221,8 @@ public class MyPatientsPage {
 	        return true;
 	    }
 	    
-	    public boolean isEmailValidForAllPatients() {
+	    public boolean isEmailValidForAllPatients()
+	    {
 	    	 logger.info("Checking email validation for all patient records");
 
 	        for (WebElement cell : details) {
@@ -229,7 +248,8 @@ public class MyPatientsPage {
 	    }
 	    
 	    
-	    public boolean isPhoneNumberValidForAllPatients() {
+	    public boolean isPhoneNumberValidForAllPatients()
+	    {
 	    	logger.info("Checking Phone Number validation for all patient records");
 	        for (WebElement cell : details) {
 
@@ -252,7 +272,8 @@ public class MyPatientsPage {
 
 	    
 	    
-	    public boolean isDOBFormatValid() {
+	    public boolean isDOBFormatValid() 
+	    {
 	    	
           logger.info("Checking DOB Format is valid");
 	       String dobFormat = "\\d{2}-\\d{2}-\\d{4}";
@@ -265,7 +286,8 @@ public class MyPatientsPage {
 	        return true;
 	    }
 
-	    public boolean isLastVisitDateDisplayedForAllRows() {
+	    public boolean isLastVisitDateDisplayedForAllRows() 
+	    {
            logger.info("Checking last visit date displayed for all rows");
 	        for (WebElement lastDate : lastVisitDateCells) {
 	            if (lastDate.getText().trim().isEmpty()) {
@@ -276,7 +298,8 @@ public class MyPatientsPage {
 	    } 
 	    
 	    
-	    public boolean isLastVisitDateFormatValid() {
+	    public boolean isLastVisitDateFormatValid()
+	    {
 	    	 logger.info("Checking last visit date format is valid");
 
 	       String lastVisitDateFormat = "\\d{2}-\\d{2}-\\d{4}";
@@ -290,7 +313,8 @@ public class MyPatientsPage {
 	    } 
 	    
 	    
-	    public boolean areActionButtonsDisplayed() {
+	    public boolean areActionButtonsDisplayed()
+	    {
            logger.info("Checking Action button display status");
 	        for (WebElement cell : actionsColumn) {
 
@@ -308,7 +332,8 @@ public class MyPatientsPage {
 	    }
 	    
 	
-	    public boolean isDetailsInSeparateLines() {
+	    public boolean isDetailsInSeparateLines() 
+	    {
 	    	logger.info("Checking Details are in Separate lines");
 	        for (WebElement cell : details) {
 
@@ -322,7 +347,8 @@ public class MyPatientsPage {
 	    }
 	    
 	    
-	    public boolean areAllEditIconsDisplayed() {
+	    public boolean areAllEditIconsDisplayed() 
+	    {
 	    	logger.info("Checking Edit Icons displayed for all rows");
 	    	for (WebElement editIcon : editIcons) {
 	            if (!editIcon.isDisplayed()) {
@@ -331,7 +357,8 @@ public class MyPatientsPage {
 	        }
 	        return true;
 	    }
-	    public boolean areAllDeleteIconsDisplayed() {
+	    public boolean areAllDeleteIconsDisplayed()
+	    {
 	    	logger.info("Checking Delete Icons displayed for all rows");
 	        for (WebElement deleteIcon : deleteIcons) {
 	            if (!deleteIcon.isDisplayed()) {
@@ -348,7 +375,8 @@ public class MyPatientsPage {
 	  }
 	    
 	    
-	  public List<Integer> getPatientIds() {
+	  public List<Integer> getPatientIds()
+	  {
 		 logger.info("Getting all Patient Ids from My Patients page");
 	        List<Integer> ids = new ArrayList<>();
 
@@ -361,7 +389,8 @@ public class MyPatientsPage {
 	        return ids;
 	    }
 
-	   public boolean isSortedAscendingId(List<Integer> ids) {
+	   public boolean isSortedAscendingId(List<Integer> ids) 
+	   {
 		   logger.info("Checking if Patients Ids are sorted in ascending order");
 	        List<Integer> sorted = new ArrayList<>(ids);
 	        Collections.sort(sorted);
@@ -377,7 +406,8 @@ public class MyPatientsPage {
    
   
 
-  public boolean isSortedDescendingId(List<Integer> ids) {
+  public boolean isSortedDescendingId(List<Integer> ids)
+  {
 	  logger.info("Checking if Patients Ids are sorted in descending order");
     List<Integer> sorted = new ArrayList<>(ids);
     sorted.sort(Collections.reverseOrder());
@@ -391,7 +421,8 @@ public class MyPatientsPage {
 	  waitUtils.waitForClickable(upArrowName).click();
      } 
     
-    public List<String> getPatientNames() {
+    public List<String> getPatientNames() 
+    {
     	 logger.info("Getting all Patient names from My Patients page");
         List<String> names = new ArrayList<>();
 
@@ -403,7 +434,8 @@ public class MyPatientsPage {
         return names;
       }
 
-      public boolean isSortedAscendingName(List<String> names) {
+      public boolean isSortedAscendingName(List<String> names)
+      {
     	logger.info("Checking if Patients names are sorted in ascending order");
         List<String> sorted = new ArrayList<>(names);
         Collections.sort(sorted, String.CASE_INSENSITIVE_ORDER);
@@ -418,13 +450,19 @@ public class MyPatientsPage {
     } 
     
    
-      public boolean isSortedDescendingName(List<String> names) {
+      public boolean isSortedDescendingName(List<String> names)
+      {
     	 logger.info("Checking if Patients names are sorted in descending order");
         List<String> sorted = new ArrayList<>(names);
         sorted.sort(Collections.reverseOrder(String.CASE_INSENSITIVE_ORDER));
         return sorted.equals(names);
        }  
       
+      public int getCurrentPageNumber() {
+    	  logger.info("Getting Current page number");
+    	    return Integer.parseInt(currentPageNumber.getText());
+    	}
+     
       public void clickViewPreviousTestReports()
       {
     	  logger.info("Clicking View Previous Test reports");
@@ -435,61 +473,37 @@ public class MyPatientsPage {
   		logger.info("Returning View Patient Test Reports Title ");
   		return WaitUtils.waitForVisibility(driver, reportPageHeader, 5).getText().trim();
   	}
-      public void enterSearchText(String text) {
+      public void enterSearchText(String searchText)
+      {
     	  logger.info("Entering text in the Search bar");
     	    searchBar.clear();
-    	    searchBar.sendKeys(text);
+    	    searchBar.sendKeys(searchText);
+    	    searchBar.click();
     	}
 
-    	public void clearSearchText() {
+    	public void clearSearchText() 
+    	{
     		logger.info("Clearing search text in the Search bar");
     		searchBar.clear();
     	}
 
-    	public int getDisplayedRowCount() {
+    	public int getDisplayedRowCount()
+    	{
     		logger.info("Getting Row Count from My patients page");
     	    return tableRows.size();
     	}
-    	public void searchByPatientName(String name) {
-    		logger.info("Searching for patient with name");
-    	    searchBar.clear();
-    	    searchBar.sendKeys(name);
-    	    searchBar.click();
+    	
+    	public int getOriginalRowCount()
+    	{
+    		logger.info("Getting Row Count before entering the text in My patients page");
+    	    return tableRows.size();
     	}
     	
-    	 // Get displayed patient names after search
-        public List<String> getDisplayedPatientNames()
-        {
-            List<String> names = new ArrayList<>();
-            for (WebElement name : patientNames) {
-                names.add(name.getText().trim());
-            }
-            return names;
-        }
-
-        // Get displayed patient IDs after search
-        public List<String> getDisplayedPatientIds()
-        {
-            List<String> ids = new ArrayList<>();
-            for (WebElement id : patientIds) {
-                ids.add(id.getText().trim());
-            }
-            return ids;
-        }
-
     	
-    	   public void searchByPatientId(String id)
-    	   {
-    		logger.info("Searching for patient with Id");
-    	    searchBar.clear();
-    	    searchBar.sendKeys(id);
-    	    searchBar.click();
-    	}
-    	   
-    	   public boolean isMatchingPatientDetailsDisplayed(String searchText)
+        public boolean isMatchingPatientDetailsDisplayed(String text)
     	   {
     		   logger.info("Checking Matching Patient details displayed");
-    		    String lower = searchText.toLowerCase();
+    		    String lower = text.toLowerCase();
                     for (WebElement row : tableRows) 
                     {
                 String rowText = row.getText().toLowerCase();
@@ -515,76 +529,98 @@ public class MyPatientsPage {
     		waitUtils.waitForClickable(previousPageArrow).click();
     	}
     	
-    	 public void clickFirstPage() {
+    	 public void clickFirstPage()
+    	 {
     		 logger.info("Clicking First page Arrow on My Patients page");
     		 waitUtils.waitForClickable(firstPageArrow).click(); 
     	    }
 
-    	 public void clickLastPage() {
+    	 public void clickLastPage()
+    	 {
     		 logger.info("Clicking Last page Arrow on My Patients page");
     		 waitUtils.waitForClickable(lastPageArrow).click(); 
     	    }
-    	 public boolean isPreviousArrowDisabled() {
+    	 public boolean isPreviousArrowDisabled()
+    	 {
+    		 logger.info("Checking previous arrow disabled");
     		 boolean disabled = !previousPageArrow.isEnabled();
              logger.info("Previous Arrow Disabled: {}", disabled);
     			return disabled;
     	 }
     	
-    	 public boolean isFirstPageArrowDisabled() {
+    	 public boolean isFirstPageArrowDisabled()
+    	 {
+    		 logger.info("Checking First page arrow disabled");
     		 boolean disabled = !firstPageArrow.isEnabled();
              logger.info("First Page Arrow Disabled: {}", disabled);
     			return disabled;
     	 }
     	 
-    	 public boolean isNextPageArrowEnabled() {
+    	 public boolean isNextPageArrowEnabled()
+    	 {
+    		 logger.info("Checking Next page arrow enabled");
     		 boolean enabled = nextPageArrow.isEnabled();
              logger.info("Next page arrow enabled: {}", enabled);
     			return enabled;
     	 }
     	 
     	 
-    	 public boolean isLastPageArrowEnabled() {
+    	 public boolean isLastPageArrowEnabled()
+    	 {
+    		 logger.info("Checking Last page arrow enabled");
     		 boolean enabled = lastPageArrow.isEnabled();
              logger.info("Next page arrow enabled: {}", enabled);
     			return enabled;
     	 }
     	 
-    	 public boolean isPreviousArrowEnabled() {
+    	 public boolean isPreviousArrowEnabled() 
+    	 {
+    		 logger.info("Checking previous arrow enabled");
     		 boolean enabled = previousPageArrow.isEnabled();
              logger.info("Previous Arrow Disabled: {}", enabled);
     			return enabled;
     	 }
     	 
-    	 public boolean isFirstPageArrowEnabled() {
+    	 public boolean isFirstPageArrowEnabled()
+    	 {
+    		 logger.info("Checking First page arrow enabled");
     		 boolean enabled = firstPageArrow.isEnabled();
              logger.info("First page arrow enabled: {}", enabled);
     			return enabled;
     	 }
     	 
-    	 public boolean isNextPageArrowDisabled() {
+    	 public boolean isNextPageArrowDisabled() 
+    	 {
+    		 logger.info("Checking Next page arrow disabled");
     		 boolean disabled = !nextPageArrow.isEnabled();
              logger.info("Next Page Arrow Disabled: {}", disabled);
     			return disabled;
     	 }
     	 
-    	 public boolean isLastPageArrowDisabled() {
+    	 public boolean isLastPageArrowDisabled()
+    	 {
+    		 logger.info("Checking Last page arrow disabled");
     		 boolean disabled = !lastPageArrow.isEnabled();
              logger.info("Last Page Arrow Disabled: {}", disabled);
     			return disabled;
     	 }
     	 
-    	 public String getPaginationInfoText() {
+    	 public String getPaginationInfoText()
+    	 {
+    		 logger.info("Getting Pagination Information Text");
     	        String text = paginationInfo.getText().trim();
     	        logger.info("Pagination info displayed: {}", text);
     	        return text;
     	    }
     	 
-    	 public boolean isNoDataPresent() {
+    	 public boolean isNoDataPresent()
+    	 {
     		 logger.info("Checking No Patients records display");
     	        return tableRows.size() == 0;
     	    }
 
-    	 public boolean arePaginationControlsDisplayed() {
+    	 public boolean arePaginationControlsDisplayed()
+    	 {
     		 logger.info("Checking Pagination control displayed");
     		    return firstPageArrow.isDisplayed()
     		            && previousPageArrow.isDisplayed()
@@ -592,28 +628,28 @@ public class MyPatientsPage {
     		            && lastPageArrow.isDisplayed();
     		}
 
-    	 public int getStartCount() {
+    	 public int getStartCount()
+    	 {
+    		 logger.info("Getting Pagination start count");
     	        String text = getPaginationInfoText();
     	        return Integer.parseInt(text.split(" ")[1]);
     	    }
 
-    	    public int getEndCount() {
+    	    public int getEndCount()
+    	    {
+    	    	 logger.info("Getting Pagination end count");
     	        String text = getPaginationInfoText();
     	        return Integer.parseInt(text.split(" ")[3]);
     	    }
 
-    	    public int getTotalCount() {
+    	    public int getTotalCount()
+    	    {
+    	    	 logger.info("Getting Pagination total count");
     	        String text = getPaginationInfoText();
     	        return Integer.parseInt(text.split(" ")[5]);
     	    }
 
-    	   
-
-
-    	
-    	 
-    	 
-}  
+    	  }  
 	    
 	    
 	    
