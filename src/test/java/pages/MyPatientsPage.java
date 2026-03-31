@@ -23,8 +23,7 @@ public class MyPatientsPage
 	 private final WaitUtils waitUtils;
 	private static final Logger logger = LoggerFactory.getLogger(MyPatientsPage.class);
 
-	@FindBy(xpath=("//button[contains(text(),'My Patients')]"))
-			private WebElement myPatientsButton;
+	
 	@FindBy(xpath=("//h1[contains(text(),'My Patients')]"))
             private WebElement pageHeader;
 	 @FindBy(xpath = "//input[@placeholder='Search']")
